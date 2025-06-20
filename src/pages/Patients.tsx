@@ -24,6 +24,13 @@ export default function Patients() {
 
     const [showForm, setShowForm] = useState(false)
     const [editingPatient, setEditingPatient] = useState<Patient | null>(null)
+    const [searchTerm, setSearchTerm] = useState("")
+
+    const filteredPatients = patients.filter(
+        (p) =>
+            p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            p.ownerName.toLowerCase().includes(searchTerm.toLowerCase())
+    )
 
     const handleSave = (data: Omit<Patient, "id">, id?: string) => {
         if (id) {
@@ -64,6 +71,16 @@ export default function Patients() {
             </div>
 
             <div className="bg-white p-6 rounded-lg shadow">
+                <div className="mb-4">
+                    <input
+                        type="text"
+                        placeholder="Search by name or owner..."
+                        className="w-full md:w-1/2 p-2 border border-gray-300 rounded"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                </div>
+
                 <table className="min-w-full text-sm text-left">
                     <thead className="bg-gray-100 text-gray-600">
                         <tr>
@@ -76,7 +93,7 @@ export default function Patients() {
                         </tr>
                     </thead>
                     <tbody className="text-gray-700">
-                        {patients.map((patient) => (
+                        {filteredPatients.map((patient) => (
                             <tr key={patient.id} className="border-t">
                                 <td className="px-4 py-2">{patient.name}</td>
                                 <td className="px-4 py-2">{patient.species}</td>
