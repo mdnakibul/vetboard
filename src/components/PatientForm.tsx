@@ -33,6 +33,20 @@ export default function PatientForm({ initialData, onSave, onClose }: Props) {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
+
+        // Basic Validation
+        const errors: string[] = []
+        if (!formData.name) errors.push("Name is required.")
+        if (!formData.species) errors.push("Species is required.")
+        if (formData.age <= 0) errors.push("Age must be greater than 0.")
+        if (!formData.ownerName) errors.push("Owner name is required.")
+        if (!formData.contact) errors.push("Contact is required.")
+
+        if (errors.length > 0) {
+            alert(errors.join("\n"))
+            return
+        }
+
         onSave(formData, initialData?.id)
         onClose()
     }
