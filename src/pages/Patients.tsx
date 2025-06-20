@@ -1,30 +1,64 @@
+import PatientForm from "../components/PatientForm"
 import type { Patient } from "../types/patient"
-
-const mockPatients: Patient[] = [
-    {
-        id: "1",
-        name: "Bella",
-        species: "Dog",
-        age: 4,
-        ownerName: "John Doe",
-        contact: "01234567890",
-    },
-    {
-        id: "2",
-        name: "Max",
-        species: "Cat",
-        age: 2,
-        ownerName: "Jane Smith",
-        contact: "09876543210",
-    },
-]
+import { useState } from "react"
 
 export default function Patients() {
+    const [patients, setPatients] = useState<Patient[]>([
+        {
+            id: "1",
+            name: "Bella",
+            species: "Dog",
+            age: 4,
+            ownerName: "John Doe",
+            contact: "01234567890",
+        },
+        {
+            id: "2",
+            name: "Max",
+            species: "Cat",
+            age: 2,
+            ownerName: "Jane Smith",
+            contact: "09876543210",
+        },
+    ])
+
+    const [showForm, setShowForm] = useState(false)
+    const [editingPatient, setEditingPatient] = useState<Patient | null>(null)
+
+    const handleSave = (data: Omit<Patient, "id">, id?: string) => {
+        if (id) {
+            setPatients((prev) =>
+                prev.map((p) => (p.id === id ? { ...p, ...data } : p))
+            )
+        } else {
+            setPatients((prev) => [
+                ...prev,
+                { id: crypto.randomUUID(), ...data },
+            ])
+        }
+    }
+
+    const handleEdit = (patient: Patient) => {
+        setEditingPatient(patient)
+        setShowForm(true)
+    }
+
+    const handleDelete = (id: string) => {
+        if (confirm("Are you sure you want to delete this patient?")) {
+            setPatients((prev) => prev.filter((p) => p.id !== id))
+        }
+    }
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-semibold text-gray-800">Patients</h2>
-                <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">
+                <button
+                    className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+                    onClick={() => {
+                        setEditingPatient(null)
+                        setShowForm(true)
+                    }}
+                >
                     + Add Patient
                 </button>
             </div>
@@ -42,7 +76,7 @@ export default function Patients() {
                         </tr>
                     </thead>
                     <tbody className="text-gray-700">
-                        {mockPatients.map((patient) => (
+                        {patients.map((patient) => (
                             <tr key={patient.id} className="border-t">
                                 <td className="px-4 py-2">{patient.name}</td>
                                 <td className="px-4 py-2">{patient.species}</td>
@@ -50,10 +84,16 @@ export default function Patients() {
                                 <td className="px-4 py-2">{patient.ownerName}</td>
                                 <td className="px-4 py-2">{patient.contact}</td>
                                 <td className="px-4 py-2">
-                                    <button className="text-blue-600 hover:underline text-xs mr-2">
+                                    <button
+                                        onClick={() => handleEdit(patient)}
+                                        className="text-blue-600 hover:underline text-xs mr-2"
+                                    >
                                         Edit
                                     </button>
-                                    <button className="text-red-600 hover:underline text-xs">
+                                    <button
+                                        onClick={() => handleDelete(patient.id)}
+                                        className="text-red-600 hover:underline text-xs"
+                                    >
                                         Delete
                                     </button>
                                 </td>
@@ -62,6 +102,14 @@ export default function Patients() {
                     </tbody>
                 </table>
             </div>
+
+            {showForm && (
+                <PatientForm
+                    initialData={editingPatient ?? undefined}
+                    onSave={handleSave}
+                    onClose={() => setShowForm(false)}
+                />
+            )}
         </div>
     )
 }
