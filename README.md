@@ -1,54 +1,112 @@
-# React + TypeScript + Vite
+# VetBoard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+VetBoard is a veterinary clinic management dashboard built with **React**, **TypeScript**, **Vite**, and **Tailwind CSS**. It provides an interface for managing patients, appointments, and clinic settings.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Dashboard**: View summary cards and recent appointments.
+- **Patients**: Add, edit, delete, and search for patients.
+- **Appointments**: Schedule, edit, and manage appointments.
+- **Settings**: Placeholder for clinic information and settings.
+- **Responsive UI**: Built with Tailwind CSS for modern, responsive design.
+- **Routing**: Uses React Router for navigation.
+- **Component-based**: Modular React components for easy maintenance.
 
-## Expanding the ESLint configuration
+## Project Structure
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```
+├── public/
+├── src/
+│   ├── assets/
+│   ├── components/
+│   │   ├── AppointmentForm.tsx
+│   │   ├── Modal.tsx
+│   │   ├── PatientForm.tsx
+│   │   ├── Sidebar.tsx
+│   │   ├── Toolbar.tsx
+│   │   └── Topbar.tsx
+│   ├── hooks/
+│   ├── layouts/
+│   │   └── MainLayout.tsx
+│   ├── lib/
+│   ├── pages/
+│   │   ├── Appointments.tsx
+│   │   ├── Dashboard.tsx
+│   │   ├── Patients.tsx
+│   │   └── Settings.tsx
+│   ├── types/
+│   │   ├── appointment.ts
+│   │   └── patient.ts
+│   ├── App.css
+│   ├── App.tsx
+│   ├── index.css
+│   ├── main.tsx
+│   └── vite-env.d.ts
+├── index.html
+├── package.json
+├── tailwind.config.js
+├── tsconfig.app.json
+├── tsconfig.json
+├── tsconfig.node.json
+└── vite.config.ts
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Getting Started
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Prerequisites
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+- [Node.js](https://nodejs.org/) (v18 or newer recommended)
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
+
+### Installation
+
+1. **Clone the repository:**
+   ```sh
+   git clone <repository-url>
+   cd vetboard
+   ```
+
+2. **Install dependencies:**
+   ```sh
+   npm install
+   # or
+   yarn install
+   ```
+
+3. **Start the development server:**
+   ```sh
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+4. Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+### Build for Production
+
+```sh
+npm run build
+# or
+yarn build
 ```
+
+### Linting
+
+```sh
+npm run lint
+# or
+yarn lint
+```
+
+## Tech Stack
+
+- [React](https://react.dev/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Vite](https://vitejs.dev/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [React Router](https://reactrouter.com/)
+- [React Icons](https://react-icons.github.io/react-icons/)
+
+## License
+
+This project is licensed under the MIT License.
