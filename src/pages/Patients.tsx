@@ -93,6 +93,13 @@ export default function Patients() {
                         </tr>
                     </thead>
                     <tbody className="text-gray-700">
+                        {filteredPatients.length === 0 && (
+                            <tr>
+                                <td colSpan={6} className="text-center py-4 text-gray-400">
+                                    No matching patients found.
+                                </td>
+                            </tr>
+                        )}
                         {filteredPatients.map((patient) => (
                             <tr key={patient.id} className="border-t">
                                 <td className="px-4 py-2">{patient.name}</td>
