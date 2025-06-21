@@ -1,14 +1,23 @@
 import { useState } from "react"
 import type { Appointment } from "../types/appointment"
 import AppointmentForm from "../components/AppointmentForm"
-interface Appointment {
-    id: string
-    patientName: string
-    date: string
-    reason: string
-    status: "Pending" | "Completed" | "Canceled"
-}
 
+import { Button } from "@/components/ui/button"
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card"
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table"
+import { Badge } from "@/components/ui/badge"
 
 export default function Appointments() {
     const [appointments, setAppointments] = useState<Appointment[]>([
@@ -27,6 +36,7 @@ export default function Appointments() {
             status: "Pending",
         },
     ])
+
     const [showForm, setShowForm] = useState(false)
     const [editing, setEditing] = useState<Appointment | null>(null)
 
@@ -54,69 +64,75 @@ export default function Appointments() {
         }
     }
 
+    const renderStatusBadge = (status: Appointment["status"]) => {
+        switch (status) {
+            case "Completed":
+                return <Badge className="bg-green-100 text-green-700" variant="outline">Completed</Badge>
+            case "Pending":
+                return <Badge className="bg-yellow-100 text-yellow-700" variant="outline">Pending</Badge>
+            case "Canceled":
+                return <Badge className="bg-red-100 text-red-700" variant="outline">Canceled</Badge>
+            default:
+                return null
+        }
+    }
+
     return (
         <div className="space-y-6">
+            {/* Header */}
             <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-semibold text-gray-800">Appointments</h2>
-                <button
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
-                    onClick={() => {
-                        setEditing(null)
-                        setShowForm(true)
-                    }}
-                >
+                <h2 className="text-2xl font-semibold text-foreground">Appointments</h2>
+                <Button onClick={() => {
+                    setEditing(null)
+                    setShowForm(true)
+                }}>
                     + New Appointment
-                </button>
+                </Button>
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow">
-                <table className="min-w-full text-sm text-left">
-                    <thead className="bg-gray-100 text-gray-600">
-                        <tr>
-                            <th className="px-4 py-2">Patient</th>
-                            <th className="px-4 py-2">Date</th>
-                            <th className="px-4 py-2">Reason</th>
-                            <th className="px-4 py-2">Status</th>
-                            <th className="px-4 py-2">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody className="text-gray-700">
-                        {appointments.map((a) => (
-                            <tr key={a.id} className="border-t">
-                                <td className="px-4 py-2">{a.patientName}</td>
-                                <td className="px-4 py-2">{a.date}</td>
-                                <td className="px-4 py-2">{a.reason}</td>
-                                <td className="px-4 py-2">
-                                    <span
-                                        className={`px-2 py-1 rounded-full text-xs font-semibold ${a.status === "Completed"
-                                            ? "bg-green-100 text-green-700"
-                                            : a.status === "Pending"
-                                                ? "bg-yellow-100 text-yellow-700"
-                                                : "bg-red-100 text-red-700"
-                                            }`}
-                                    >
-                                        {a.status}
-                                    </span>
-                                </td>
-                                <td className="px-4 py-2">
-                                    <button
-                                        onClick={() => handleEdit(a)}
-                                        className="text-blue-600 hover:underline text-xs mr-2"
-                                    >
-                                        Edit
-                                    </button>
-                                    <button
-                                        onClick={() => handleDelete(a.id)}
-                                        className="text-red-600 hover:underline text-xs"
-                                    >
-                                        Delete
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+            {/* Appointment Table */}
+            <Card>
+                <CardHeader>
+                    <CardTitle className="text-lg">Upcoming & Recent Appointments</CardTitle>
+                </CardHeader>
+                <CardContent className="overflow-x-auto">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Patient</TableHead>
+                                <TableHead>Date</TableHead>
+                                <TableHead>Reason</TableHead>
+                                <TableHead>Status</TableHead>
+                                <TableHead>Actions</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {appointments.map((a) => (
+                                <TableRow key={a.id}>
+                                    <TableCell>{a.patientName}</TableCell>
+                                    <TableCell>{a.date}</TableCell>
+                                    <TableCell>{a.reason}</TableCell>
+                                    <TableCell>{renderStatusBadge(a.status)}</TableCell>
+                                    <TableCell>
+                                        <button
+                                            onClick={() => handleEdit(a)}
+                                            className="text-blue-600 hover:underline text-xs mr-2"
+                                        >
+                                            Edit
+                                        </button>
+                                        <button
+                                            onClick={() => handleDelete(a.id)}
+                                            className="text-red-600 hover:underline text-xs"
+                                        >
+                                            Delete
+                                        </button>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </CardContent>
+            </Card>
 
             {showForm && (
                 <AppointmentForm
