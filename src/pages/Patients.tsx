@@ -17,6 +17,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
+import { Pencil1Icon, TrashIcon } from "@radix-ui/react-icons"
 
 export default function Patients() {
     const [patients, setPatients] = useState<Patient[]>([
@@ -124,19 +125,20 @@ export default function Patients() {
                                         <TableCell>{patient.age}</TableCell>
                                         <TableCell>{patient.ownerName}</TableCell>
                                         <TableCell>{patient.contact}</TableCell>
-                                        <TableCell>
-                                            <button
+                                        <TableCell className="flex space-x-2">
+                                            <Button
                                                 onClick={() => handleEdit(patient)}
-                                                className="text-blue-600 hover:underline text-xs mr-2"
+                                                className="size-8"
+                                                variant="secondary" size="icon"
                                             >
-                                                Edit
-                                            </button>
-                                            <button
+                                                <Pencil1Icon className="w-4 h-4 mr-1" />
+                                            </Button>
+                                            <Button
                                                 onClick={() => handleDelete(patient.id)}
-                                                className="text-red-600 hover:underline text-xs"
+                                                variant="destructive" size="icon" className="size-8 text-white"
                                             >
-                                                Delete
-                                            </button>
+                                                <TrashIcon />
+                                            </Button>
                                         </TableCell>
                                     </TableRow>
                                 ))
