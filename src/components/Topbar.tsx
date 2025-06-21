@@ -1,14 +1,24 @@
+// components/shared/topbar.tsx
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Separator } from "@/components/ui/separator"
+
 export default function Topbar() {
     return (
-        <header className="h-16 flex items-center justify-between px-6 border-b bg-white shadow-sm">
-            <div className="text-lg font-semibold text-gray-800">
+        <header className="h-16 px-6 border-b flex items-center justify-between bg-background shadow-sm">
+            <h1 className="text-lg font-semibold text-foreground">
                 Welcome to VetBoard
-            </div>
-            <div className="flex items-center gap-3">
-                {/* Future: Notification icon or search */}
-                <div className="w-10 h-10 bg-green-600 text-white rounded-full flex items-center justify-center font-bold">
-                    V
-                </div>
+            </h1>
+
+            <div className="flex items-center gap-4">
+                {/* Placeholder for future notification or search */}
+                {/* <BellIcon className="w-5 h-5 text-muted-foreground" /> */}
+
+                <Separator orientation="vertical" className="h-6" />
+
+                <Avatar className="h-10 w-10">
+                    <AvatarImage src="" alt="User" />
+                    <AvatarFallback>V</AvatarFallback>
+                </Avatar>
             </div>
         </header>
     )
