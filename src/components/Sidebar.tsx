@@ -1,5 +1,7 @@
 import { NavLink } from "react-router-dom"
 import { FaPaw, FaUser, FaCalendarAlt, FaCog } from "react-icons/fa"
+import { cn } from "@/lib/utils"
+import { buttonVariants } from "@/components/ui/button"
 
 const navItems = [
     { name: "Dashboard", path: "/", icon: <FaPaw /> },
@@ -10,21 +12,31 @@ const navItems = [
 
 export default function Sidebar() {
     return (
-        <aside className="w-64 h-screen bg-white border-r border-gray-200 p-4 shadow-sm">
-            <div>
-                <img src="../../src/assets/vetboard_logo.png" alt="logo" style={{ width: "100%", height: '112px', objectFit: "cover" }} />
+        <aside className="w-64 h-screen bg-background border-r p-4 shadow-sm flex flex-col">
+            {/* Logo */}
+            <div className="mb-6">
+                <img
+                    src="/src/assets/vetboard_logo.png"
+                    alt="VetBoard Logo"
+                    className="w-full h-28 object-cover rounded-md"
+                />
             </div>
-            <nav className="flex flex-col space-y-2">
+
+            {/* Navigation */}
+            <nav className="flex flex-col gap-2">
                 {navItems.map((item) => (
                     <NavLink
                         key={item.name}
                         to={item.path}
                         end
                         className={({ isActive }) =>
-                            `flex items-center px-4 py-2 rounded-md text-sm font-medium ${isActive
-                                ? "bg-green-100 text-green-700"
-                                : "text-gray-700 hover:bg-gray-100"
-                            }`
+                            cn(
+                                buttonVariants({ variant: "ghost", size: "sm" }),
+                                "justify-start",
+                                isActive
+                                    ? "bg-muted text-primary"
+                                    : "text-muted-foreground hover:bg-accent"
+                            )
                         }
                     >
                         <span className="mr-3 text-lg">{item.icon}</span>
