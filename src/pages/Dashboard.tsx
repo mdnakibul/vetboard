@@ -4,7 +4,6 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import {
     Table,
     TableBody,
@@ -13,6 +12,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
+import { StatusBadge } from "@/components/StatusBadge"
 import { useState } from "react"
 
 const mockAppointments: Appointment[] = [
@@ -32,14 +32,6 @@ const mockAppointments: Appointment[] = [
     },
 ]
 
-function StatusBadge({ status }: { status: Appointment["status"] }) {
-    const statusStyles = {
-        Completed: "bg-green-100 text-green-700",
-        Pending: "bg-yellow-100 text-yellow-700",
-        Canceled: "bg-red-100 text-red-700",
-    }
-    return <Badge className={statusStyles[status]}>{status}</Badge>
-}
 
 export default function Dashboard() {
     const [appointments] = useState(mockAppointments)
