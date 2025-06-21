@@ -17,6 +17,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
+import { Pencil1Icon, TrashIcon } from "@radix-ui/react-icons"
 import { StatusBadge } from "../components/StatusBadge"
 
 export default function Appointments() {
@@ -100,20 +101,26 @@ export default function Appointments() {
                                     <TableCell>{a.date}</TableCell>
                                     <TableCell>{a.reason}</TableCell>
                                     <TableCell><StatusBadge status={a.status} /></TableCell>
-                                    <TableCell>
-                                        <button
+
+                                    <TableCell className="flex space-x-2">
+                                        <Button
+                                            variant="secondary" size="icon" className="size-8"
                                             onClick={() => handleEdit(a)}
-                                            className="text-blue-600 hover:underline text-xs mr-2"
+                                            aria-label={`Edit appointment for ${a.patientName}`}
                                         >
-                                            Edit
-                                        </button>
-                                        <button
+                                            <Pencil1Icon className="w-4 h-4 mr-1" />
+                                        </Button>
+                                        <Button
+                                            variant="destructive" size="icon"
                                             onClick={() => handleDelete(a.id)}
-                                            className="text-red-600 hover:underline text-xs"
+                                            aria-label={`Delete appointment for ${a.patientName}`}
+                                            className="text-white size-8"
                                         >
-                                            Delete
-                                        </button>
+                                            <TrashIcon />
+                                        </Button>
                                     </TableCell>
+
+
                                 </TableRow>
                             ))}
                         </TableBody>
