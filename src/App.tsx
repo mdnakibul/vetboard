@@ -4,6 +4,7 @@ import Patients from "./pages/Patients"
 import Appointments from "./pages/Appointments"
 import Settings from "./pages/Settings"
 import MainLayout from "./layouts/MainLayout"
+import PatientView from "./pages/PatientView"
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="patients" element={<Patients />} />
         <Route path="appointments" element={<Appointments />} />
         <Route path="settings" element={<Settings />} />
+        <Route path="/patients/:id" element={<PatientView />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Route>
     </Routes>
