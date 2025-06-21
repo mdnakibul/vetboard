@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom"
 import { FaPaw, FaUser, FaCalendarAlt, FaCog } from "react-icons/fa"
 import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button-variants"
 
 const navItems = [
     { name: "Dashboard", path: "/", icon: <FaPaw /> },
