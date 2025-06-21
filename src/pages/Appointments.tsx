@@ -17,7 +17,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
+import { StatusBadge } from "../components/StatusBadge"
 
 export default function Appointments() {
     const [appointments, setAppointments] = useState<Appointment[]>([
@@ -64,19 +64,6 @@ export default function Appointments() {
         }
     }
 
-    const renderStatusBadge = (status: Appointment["status"]) => {
-        switch (status) {
-            case "Completed":
-                return <Badge className="bg-green-100 text-green-700" variant="outline">Completed</Badge>
-            case "Pending":
-                return <Badge className="bg-yellow-100 text-yellow-700" variant="outline">Pending</Badge>
-            case "Canceled":
-                return <Badge className="bg-red-100 text-red-700" variant="outline">Canceled</Badge>
-            default:
-                return null
-        }
-    }
-
     return (
         <div className="space-y-6">
             {/* Header */}
@@ -112,7 +99,7 @@ export default function Appointments() {
                                     <TableCell>{a.patientName}</TableCell>
                                     <TableCell>{a.date}</TableCell>
                                     <TableCell>{a.reason}</TableCell>
-                                    <TableCell>{renderStatusBadge(a.status)}</TableCell>
+                                    <TableCell><StatusBadge status={a.status} /></TableCell>
                                     <TableCell>
                                         <button
                                             onClick={() => handleEdit(a)}
