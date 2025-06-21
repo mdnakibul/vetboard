@@ -30,6 +30,7 @@ const formSchema = z.object({
     timeFormat: z.enum(["12", "24"]),
     darkMode: z.boolean(),
 })
+type FormValues = z.infer<typeof formSchema>
 
 export default function SettingsPage() {
     const form = useForm({
@@ -46,7 +47,7 @@ export default function SettingsPage() {
         },
     })
 
-    const onSubmit = (data: any) => {
+    const onSubmit = (data: FormValues) => {
         console.log("Settings Saved", data)
     }
 
