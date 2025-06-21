@@ -4,6 +4,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
 import {
     Table,
     TableBody,
@@ -12,8 +13,36 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
+import { useState } from "react"
+
+const mockAppointments: Appointment[] = [
+    {
+        id: "1",
+        patientName: "Bella",
+        date: "2025-06-20",
+        reason: "Vaccination",
+        status: "Completed",
+    },
+    {
+        id: "2",
+        patientName: "Max",
+        date: "2025-06-19",
+        reason: "Checkup",
+        status: "Pending",
+    },
+]
+
+function StatusBadge({ status }: { status: Appointment["status"] }) {
+    const statusStyles = {
+        Completed: "bg-green-100 text-green-700",
+        Pending: "bg-yellow-100 text-yellow-700",
+        Canceled: "bg-red-100 text-red-700",
+    }
+    return <Badge className={statusStyles[status]}>{status}</Badge>
+}
 
 export default function Dashboard() {
+    const [appointments] = useState(mockAppointments)
     return (
         <div className="space-y-6">
             {/* Summary Cards */}
@@ -59,18 +88,16 @@ export default function Dashboard() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            <TableRow>
-                                <TableCell>Bella</TableCell>
-                                <TableCell>2025-06-20</TableCell>
-                                <TableCell>Vaccination</TableCell>
-                                <TableCell>Completed</TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell>Max</TableCell>
-                                <TableCell>2025-06-19</TableCell>
-                                <TableCell>Checkup</TableCell>
-                                <TableCell>Pending</TableCell>
-                            </TableRow>
+                            {appointments.map((a) => (
+                                <TableRow key={a.id}>
+                                    <TableCell>{a.patientName}</TableCell>
+                                    <TableCell>{a.date}</TableCell>
+                                    <TableCell>{a.reason}</TableCell>
+                                    <TableCell>
+                                        <StatusBadge status={a.status} />
+                                    </TableCell>
+                                </TableRow>
+                            ))}
                         </TableBody>
                     </Table>
                 </CardContent>
