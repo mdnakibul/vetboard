@@ -11,7 +11,9 @@ const navItems = [
 export default function Sidebar() {
     return (
         <aside className="w-64 h-screen bg-white border-r border-gray-200 p-4 shadow-sm">
-            <div className="text-2xl font-bold text-green-600 mb-10">VetBoard</div>
+            <div>
+                <img src="../../src/assets/vetboard_logo.png" alt="logo" style={{ width: "100%", height: '112px', objectFit: "cover" }} />
+            </div>
             <nav className="flex flex-col space-y-2">
                 {navItems.map((item) => (
                     <NavLink
