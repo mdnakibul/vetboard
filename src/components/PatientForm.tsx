@@ -1,5 +1,29 @@
-import { useState, useEffect } from "react"
-import type { Patient } from "../types/patient"
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
+import { z } from "zod"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import type { Patient } from "@/types/patient"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+
+const formSchema = z.object({
+    name: z.string().min(1, "Name is required"),
+    species: z.string().min(1, "Species is required"),
+    age: z.coerce.number().min(0, "Age must be 0 or more"),
+    ownerName: z.string().min(1, "Owner name is required"),
+    contact: z.string().min(1, "Contact is required"),
+})
+
+type FormValues = z.infer<typeof formSchema>
 
 interface Props {
     initialData?: Patient
@@ -8,94 +32,122 @@ interface Props {
 }
 
 export default function PatientForm({ initialData, onSave, onClose }: Props) {
-    const [formData, setFormData] = useState<Omit<Patient, "id">>({
-        name: "",
-        species: "",
-        age: 0,
-        ownerName: "",
-        contact: "",
+    const form = useForm<FormValues>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            name: initialData?.name || "",
+            species: initialData?.species || "",
+            age: initialData?.age || 0,
+            ownerName: initialData?.ownerName || "",
+            contact: initialData?.contact || "",
+        },
     })
 
-    useEffect(() => {
-        if (initialData) {
-            const { ...rest } = initialData
-            setFormData(rest)
-        }
-    }, [initialData])
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target
-        setFormData((prev) => ({
-            ...prev,
-            [name]: name === "age" ? Number(value) : value,
-        }))
-    }
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault()
-
-        // Basic Validation
-        const errors: string[] = []
-        if (!formData.name) errors.push("Name is required.")
-        if (!formData.species) errors.push("Species is required.")
-        if (formData.age <= 0) errors.push("Age must be greater than 0.")
-        if (!formData.ownerName) errors.push("Owner name is required.")
-        if (!formData.contact) errors.push("Contact is required.")
-
-        if (errors.length > 0) {
-            alert(errors.join("\n"))
-            return
-        }
-
-        onSave(formData, initialData?.id)
+    const handleSubmit = (data: FormValues) => {
+        onSave(data, initialData?.id)
         onClose()
     }
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white p-6 rounded-lg w-full max-w-md shadow-lg">
-                <h2 className="text-xl font-bold mb-4">
-                    {initialData ? "Edit Patient" : "Add Patient"}
-                </h2>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    {(["name", "species", "ownerName", "contact"] as (keyof Omit<Patient, "id" | "age">)[]).map((field) => (
-                        <input
-                            key={field}
-                            type="text"
-                            name={field}
-                            value={formData[field]}
-                            onChange={handleChange}
-                            placeholder={field[0].toUpperCase() + field.slice(1)}
-                            className="w-full p-2 border rounded"
-                            required
+        <Dialog open onOpenChange={onClose}>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>{initialData ? "Edit" : "Add"} Patient</DialogTitle>
+                </DialogHeader>
+
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4 py-2">
+                        <FormField
+                            control={form.control}
+                            name="name"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Patient Name</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="Name" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
                         />
-                    ))}
-                    <input
-                        type="number"
-                        name="age"
-                        value={formData.age}
-                        onChange={handleChange}
-                        placeholder="Age"
-                        className="w-full p-2 border rounded"
-                        required
-                    />
-                    <div className="flex justify-end gap-2">
-                        <button
-                            type="button"
-                            onClick={onClose}
-                            className="px-4 py-2 rounded border text-gray-700"
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            type="submit"
-                            className="px-4 py-2 rounded bg-green-600 text-white"
-                        >
-                            Save
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
+
+                        <FormField
+                            control={form.control}
+                            name="species"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Species</FormLabel>
+                                    <FormControl>
+                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select species" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="Dog">Dog</SelectItem>
+                                                <SelectItem value="Cat">Cat</SelectItem>
+                                                <SelectItem value="Cow">Cow</SelectItem>
+                                                <SelectItem value="Goat">Goat</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="age"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Age</FormLabel>
+                                    <FormControl>
+                                        <Input type="number" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="ownerName"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Owner Name</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="Owner name" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="contact"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Contact</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="Phone or Email" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <div className="flex justify-end gap-2 pt-2">
+                            <Button type="button" variant="outline" onClick={onClose}>
+                                Cancel
+                            </Button>
+                            <Button type="submit">
+                                {initialData ? "Update" : "Add"} Patient
+                            </Button>
+                        </div>
+                    </form>
+                </Form>
+            </DialogContent>
+        </Dialog>
     )
 }
