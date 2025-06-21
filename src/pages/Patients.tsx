@@ -18,6 +18,7 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { Pencil1Icon, TrashIcon } from "@radix-ui/react-icons"
+import { useNavigate } from "react-router-dom"
 
 export default function Patients() {
     const [patients, setPatients] = useState<Patient[]>([
@@ -42,6 +43,8 @@ export default function Patients() {
     const [showForm, setShowForm] = useState(false)
     const [editingPatient, setEditingPatient] = useState<Patient | null>(null)
     const [searchTerm, setSearchTerm] = useState("")
+
+    const navigate = useNavigate()
 
     const filteredPatients = patients.filter(
         (p) =>
@@ -127,6 +130,13 @@ export default function Patients() {
                                         <TableCell>{patient.contact}</TableCell>
                                         <TableCell className="flex space-x-2">
                                             <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                onClick={() => navigate(`/patients/${patient.id}`)}
+                                            >
+                                                View
+                                            </Button>
+                                            <Button
                                                 onClick={() => handleEdit(patient)}
                                                 className="size-8"
                                                 variant="secondary" size="icon"
@@ -148,13 +158,15 @@ export default function Patients() {
                 </CardContent>
             </Card>
 
-            {showForm && (
-                <PatientForm
-                    initialData={editingPatient ?? undefined}
-                    onSave={handleSave}
-                    onClose={() => setShowForm(false)}
-                />
-            )}
-        </div>
+            {
+                showForm && (
+                    <PatientForm
+                        initialData={editingPatient ?? undefined}
+                        onSave={handleSave}
+                        onClose={() => setShowForm(false)}
+                    />
+                )
+            }
+        </div >
     )
 }
