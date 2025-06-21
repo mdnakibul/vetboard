@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import type { Patient } from "@/types/patient"
+import { FiArrowLeft } from "react-icons/fi"
 
 const mockPatients: Patient[] = [
     {
@@ -70,7 +71,7 @@ export default function PatientView() {
             <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-semibold">Patient: {patient.name}</h2>
                 <Button variant="outline" onClick={() => navigate("/patients")}>
-                    ← Back
+                    <FiArrowLeft className="w-4 h-4" />
                 </Button>
             </div>
 
