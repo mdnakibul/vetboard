@@ -1,6 +1,22 @@
 import { useState, useEffect } from "react"
 import type { Appointment } from "../types/appointment"
 
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
+
 interface Props {
     initialData?: Appointment
     onSave: (data: Omit<Appointment, "id">, id?: string) => void
@@ -22,9 +38,15 @@ export default function AppointmentForm({ initialData, onSave, onClose }: Props)
         }
     }, [initialData])
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const handleChange = (
+        e: React.ChangeEvent<HTMLInputElement>
+    ) => {
         const { name, value } = e.target
         setFormData((prev) => ({ ...prev, [name]: value }))
+    }
+
+    const handleStatusChange = (value: Appointment["status"]) => {
+        setFormData((prev) => ({ ...prev, status: value }))
     }
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -38,59 +60,54 @@ export default function AppointmentForm({ initialData, onSave, onClose }: Props)
     }
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white p-6 rounded-lg w-full max-w-md shadow-lg">
-                <h2 className="text-xl font-bold mb-4">
-                    {initialData ? "Edit Appointment" : "New Appointment"}
-                </h2>
+        <Dialog open onOpenChange={onClose}>
+            <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                    <DialogTitle>
+                        {initialData ? "Edit Appointment" : "New Appointment"}
+                    </DialogTitle>
+                </DialogHeader>
                 <form onSubmit={handleSubmit} className="space-y-4">
-                    <input
-                        type="text"
+                    <Input
                         name="patientName"
                         value={formData.patientName}
                         onChange={handleChange}
                         placeholder="Patient Name"
-                        className="w-full p-2 border rounded"
                         required
                     />
-                    <input
+                    <Input
                         type="date"
                         name="date"
                         value={formData.date}
                         onChange={handleChange}
-                        className="w-full p-2 border rounded"
                         required
                     />
-                    <input
-                        type="text"
+                    <Input
                         name="reason"
                         value={formData.reason}
                         onChange={handleChange}
                         placeholder="Reason"
-                        className="w-full p-2 border rounded"
                         required
                     />
-                    <select
-                        name="status"
-                        value={formData.status}
-                        onChange={handleChange}
-                        className="w-full p-2 border rounded"
-                    >
-                        <option value="Pending">Pending</option>
-                        <option value="Completed">Completed</option>
-                        <option value="Canceled">Canceled</option>
-                    </select>
+                    <Select value={formData.status} onValueChange={handleStatusChange}>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Select Status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="Pending">Pending</SelectItem>
+                            <SelectItem value="Completed">Completed</SelectItem>
+                            <SelectItem value="Canceled">Canceled</SelectItem>
+                        </SelectContent>
+                    </Select>
 
                     <div className="flex justify-end gap-2">
-                        <button type="button" onClick={onClose} className="px-4 py-2 border rounded">
+                        <Button type="button" variant="outline" onClick={onClose}>
                             Cancel
-                        </button>
-                        <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded">
-                            Save
-                        </button>
+                        </Button>
+                        <Button type="submit">Save</Button>
                     </div>
                 </form>
-            </div>
-        </div>
+            </DialogContent>
+        </Dialog>
     )
 }
