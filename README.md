@@ -62,7 +62,7 @@ VetBoard is a veterinary clinic management dashboard built with **React**, **Typ
 
 1. **Clone the repository:**
    ```sh
-   git clone <repository-url>
+   git clone https://github.com/mdnakibul/vetboard.git
    cd vetboard
    ```
 
