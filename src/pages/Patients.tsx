@@ -19,6 +19,8 @@ import {
 } from "@/components/ui/table"
 import { Pencil1Icon, TrashIcon } from "@radix-ui/react-icons"
 import { useNavigate } from "react-router-dom"
+import { EyeOpenIcon } from "@radix-ui/react-icons"
+
 
 export default function Patients() {
     const [patients, setPatients] = useState<Patient[]>([
@@ -134,8 +136,9 @@ export default function Patients() {
                                                 size="sm"
                                                 onClick={() => navigate(`/patients/${patient.id}`)}
                                             >
-                                                View
+                                                <EyeOpenIcon className="w-4 h-4" />
                                             </Button>
+
                                             <Button
                                                 onClick={() => handleEdit(patient)}
                                                 className="size-8"
