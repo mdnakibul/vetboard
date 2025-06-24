@@ -39,9 +39,9 @@ export default function Dashboard() {
         <div className="space-y-6">
             {/* Summary Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <Card>
+                <Card className="bg-muted">
                     <CardHeader className="text-center">
-                        <CardTitle className="text-sm font-medium text-muted-foreground">
+                        <CardTitle className="text-sm font-medium">
                             Total Patients
                         </CardTitle>
                     </CardHeader>
@@ -50,9 +50,9 @@ export default function Dashboard() {
                     </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="bg-muted">
                     <CardHeader className="text-center">
-                        <CardTitle className="text-sm font-medium text-muted-foreground">
+                        <CardTitle className="text-sm font-medium">
                             Active Cases
                         </CardTitle>
                     </CardHeader>
