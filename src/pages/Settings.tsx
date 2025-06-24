@@ -13,7 +13,7 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
 import { Button } from "@/components/ui/button"
 import { useForm } from "react-hook-form"
@@ -34,7 +34,7 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>
 
 export default function SettingsPage() {
-    const { toggleTheme, theme } = useTheme()
+    const { toggleTheme, theme, setTheme } = useTheme()
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -128,17 +128,20 @@ export default function SettingsPage() {
                                 )}
                             />
 
-                            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                                <div className="space-y-0.5">
-                                    <FormLabel>Dark Mode</FormLabel>
-                                    <p className="text-sm text-muted-foreground">Enable dark theme</p>
-                                </div>
-                                <FormControl>
-                                    <Switch
-                                        checked={theme === "dark"}
-                                        onCheckedChange={toggleTheme}
-                                    />
-                                </FormControl>
+                            <FormItem>
+                                <FormLabel>Theme Preference</FormLabel>
+                                <Select value={theme} onValueChange={(val) => setTheme(val as Theme)}>
+                                    <FormControl>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Select theme" />
+                                        </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                        <SelectItem value="system">System Default</SelectItem>
+                                        <SelectItem value="light">Light</SelectItem>
+                                        <SelectItem value="dark">Dark</SelectItem>
+                                    </SelectContent>
+                                </Select>
                             </FormItem>
 
                         </TabsContent>
