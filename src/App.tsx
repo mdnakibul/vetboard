@@ -5,7 +5,7 @@ import Appointments from "./pages/Appointments"
 import Settings from "./pages/Settings"
 import MainLayout from "./layouts/MainLayout"
 import PatientView from "./pages/PatientView"
-
+// TODO: Review icon library. We have 3 library for icon but how many are actually needed? 
 function App() {
   return (
     <Routes>
