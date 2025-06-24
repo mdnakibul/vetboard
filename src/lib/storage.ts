@@ -15,6 +15,14 @@ export function savePatients(data: Patient[]) {
   localStorage.setItem(STORAGE_KEYS.patients, JSON.stringify(data));
 }
 
+export function getStoredPatientById(id: string): Patient | undefined {
+  const json = localStorage.getItem(STORAGE_KEYS.patients);
+  if (!json) return undefined;
+
+  const patients: Patient[] = JSON.parse(json);
+  return patients.find((p) => p.id === id);
+}
+
 export function getStoredAppointments(): Appointment[] {
   const json = localStorage.getItem(STORAGE_KEYS.appointments);
   return json ? JSON.parse(json) : [];
