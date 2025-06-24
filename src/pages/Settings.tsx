@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
-import { Switch } from "@/components/ui/switch"
 import { Button } from "@/components/ui/button"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -34,7 +33,7 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>
 
 export default function SettingsPage() {
-    const { toggleTheme, theme, setTheme } = useTheme()
+    const { theme, setTheme } = useTheme()
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
