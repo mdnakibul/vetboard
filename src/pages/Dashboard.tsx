@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/table"
 import { StatusBadge } from "@/components/StatusBadge"
 import { useState } from "react"
+import { DashboardCalendar } from "@/components/dashboard/DashboardCalendar"
 
 const mockAppointments: Appointment[] = [
     {
@@ -60,6 +61,11 @@ export default function Dashboard() {
                         <p className="text-3xl font-bold text-primary mt-2">32</p>
                     </CardContent>
                 </Card>
+            </div>
+
+            <div className="p-4">
+                <h2 className="text-2xl font-semibold mb-4">Dashboard</h2>
+                <DashboardCalendar />
             </div>
 
             {/* Recent Appointments */}
