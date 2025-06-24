@@ -19,40 +19,37 @@ import {
 } from "@/components/ui/table"
 import { Pencil1Icon, TrashIcon } from "@radix-ui/react-icons"
 import { StatusBadge } from "../components/StatusBadge"
+import { getStoredAppointments, saveAppointments } from "../lib/storage"
+import { generateId } from "../lib/id"
 
 export default function Appointments() {
-    const [appointments, setAppointments] = useState<Appointment[]>([
-        {
-            id: "1",
-            patientName: "Bella",
-            date: "2025-06-19",
-            reason: "Vaccination",
-            status: "Completed",
-        },
-        {
-            id: "2",
-            patientName: "Max",
-            date: "2025-06-21",
-            reason: "Check-up",
-            status: "Pending",
-        },
-    ])
+    const [appointments, setAppointments] = useState<Appointment[]>(getStoredAppointments())
 
     const [showForm, setShowForm] = useState(false)
     const [editing, setEditing] = useState<Appointment | null>(null)
 
     const handleSave = (data: Omit<Appointment, "id">, id?: string) => {
+        let updatedAppointments: Appointment[] = []
+
         if (id) {
-            setAppointments((prev) =>
-                prev.map((a) => (a.id === id ? { ...a, ...data } : a))
+            // Edit existing appointment
+            updatedAppointments = appointments.map((a) =>
+                a.id === id ? { ...a, ...data } : a
             )
+            saveAppointments(updatedAppointments)
         } else {
-            setAppointments((prev) => [
-                ...prev,
-                { id: crypto.randomUUID(), ...data },
-            ])
+            // Add new appointment
+            const newAppointment: Appointment = {
+                id: generateId(),
+                ...data,
+            }
+            updatedAppointments = [...appointments, newAppointment]
+            saveAppointments(updatedAppointments)
         }
+        setAppointments(getStoredAppointments())
+
     }
+
 
     const handleEdit = (appt: Appointment) => {
         setEditing(appt)
@@ -60,10 +57,13 @@ export default function Appointments() {
     }
 
     const handleDelete = (id: string) => {
-        if (confirm("Are you sure?")) {
-            setAppointments((prev) => prev.filter((a) => a.id !== id))
-        }
+        if (!confirm("Are you sure you want to delete this appointment?")) return
+
+        const updatedAppointments = appointments.filter((a) => a.id !== id)
+        saveAppointments(updatedAppointments)
+        setAppointments(getStoredAppointments())
     }
+
 
     return (
         <div className="space-y-6">
