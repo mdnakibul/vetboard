@@ -21,6 +21,7 @@ import { Pencil1Icon, TrashIcon } from "@radix-ui/react-icons"
 import { useNavigate } from "react-router-dom"
 import { EyeOpenIcon } from "@radix-ui/react-icons"
 import { getStoredPatients, savePatients } from "@/lib/storage"
+import { generateId } from "@/lib/id"
 
 
 export default function Patients() {
@@ -37,22 +38,42 @@ export default function Patients() {
             p.ownerName.toLowerCase().includes(searchTerm.toLowerCase())
     )
 
-    const handleSave = (newPatient: Patient) => {
-        const updated = [...patients, newPatient]
-        setPatients(updated)
-        savePatients(updated)
+    const handleSave = (newData: Omit<Patient, "id">, id?: string) => {
+        if (id) {
+            // Edit existing patient
+            const updatedPatients = patients.map((p) =>
+                p.id === id ? { ...p, ...newData } : p
+            )
+            setPatients(updatedPatients)
+            savePatients(updatedPatients)
+        } else {
+            // Add new patient
+            const newPatient: Patient = {
+                ...newData,
+                id: generateId(),
+            }
+            const updatedPatients = [...patients, newPatient]
+            setPatients(updatedPatients)
+            savePatients(updatedPatients)
+        }
     }
 
-    const handleEdit = (patient: Patient) => {
+
+    const handleShowEditForm = (patient: Patient) => {
         setEditingPatient(patient)
         setShowForm(true)
     }
 
+
     const handleDelete = (id: string) => {
-        if (confirm("Are you sure you want to delete this patient?")) {
-            setPatients((prev) => prev.filter((p) => p.id !== id))
-        }
+        const confirmed = window.confirm("Are you sure you want to delete this patient?")
+        if (!confirmed) return
+
+        const updatedList = patients.filter((p) => p.id !== id)
+        setPatients(updatedList)
+        savePatients(updatedList)
     }
+
 
     return (
         <div className="space-y-6">
@@ -116,7 +137,7 @@ export default function Patients() {
                                             </Button>
 
                                             <Button
-                                                onClick={() => handleEdit(patient)}
+                                                onClick={() => handleShowEditForm(patient)}
                                                 className="size-8"
                                                 variant="secondary" size="icon"
                                             >
