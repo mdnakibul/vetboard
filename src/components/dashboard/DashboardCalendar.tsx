@@ -39,10 +39,16 @@ const events = [
 
 export const DashboardCalendar = () => {
     const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+    const [currentDate, setCurrentDate] = useState(new Date())
 
     const handleSelectSlot = ({ start }: { start: Date }) => {
         setSelectedDate(start)
     }
+
+    const handleNavigate = (newDate: Date) => {
+        setCurrentDate(newDate)
+    }
+
 
     const appointmentsForSelectedDate = events.filter((event) =>
         selectedDate ? isSameDay(event.start, selectedDate) : false
@@ -57,11 +63,14 @@ export const DashboardCalendar = () => {
                 endAccessor="end"
                 defaultView="week"
                 views={["week"]}
+                date={currentDate}
+                onNavigate={handleNavigate}
                 selectable
                 onSelectSlot={handleSelectSlot}
                 onSelectEvent={(event) => setSelectedDate(event.start)}
                 style={{ height: 500 }}
             />
+
 
             {selectedDate && (
                 <div className="mt-4 border-t pt-4">
