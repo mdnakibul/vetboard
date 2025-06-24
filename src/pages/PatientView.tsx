@@ -5,45 +5,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import type { Patient } from "@/types/patient"
 import { FiArrowLeft } from "react-icons/fi"
-
-const mockPatients: Patient[] = [
-    {
-        id: "1",
-        name: "Bella",
-        species: "Dog",
-        age: 4,
-        ownerName: "John Doe",
-        contact: "01234567890",
-        medicalHistory: [
-            {
-                id: "mh1",
-                date: "2025-06-10",
-                description: "Annual rabies vaccination.",
-                treatment: "Rabies vaccine administered.",
-                diagnosis: "Healthy",
-                vet: "Dr. Nahid",
-            },
-        ],
-    },
-    {
-        id: "2",
-        name: "Max",
-        species: "Cat",
-        age: 2,
-        ownerName: "Jane Smith",
-        contact: "09876543210",
-        medicalHistory: [
-            {
-                id: "mh2",
-                date: "2025-06-15",
-                description: "Check-up for lethargy.",
-                diagnosis: "Mild fever",
-                treatment: "Paracetamol",
-                vet: "Dr. Ayesha",
-            },
-        ],
-    },
-]
+import { getStoredPatientById } from "../lib/storage"
 
 export default function PatientView() {
     const { id } = useParams()
@@ -51,7 +13,7 @@ export default function PatientView() {
     const [patient, setPatient] = useState<Patient | null>(null)
 
     useEffect(() => {
-        const found = mockPatients.find((p) => p.id === id)
+        const found = getStoredPatientById(id)
         setPatient(found || null)
     }, [id])
 
