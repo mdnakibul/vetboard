@@ -20,28 +20,11 @@ import {
 import { Pencil1Icon, TrashIcon } from "@radix-ui/react-icons"
 import { useNavigate } from "react-router-dom"
 import { EyeOpenIcon } from "@radix-ui/react-icons"
+import { getStoredPatients, savePatients } from "@/lib/storage"
 
 
 export default function Patients() {
-    const [patients, setPatients] = useState<Patient[]>([
-        {
-            id: "1",
-            name: "Bella",
-            species: "Dog",
-            age: 4,
-            ownerName: "John Doe",
-            contact: "01234567890",
-        },
-        {
-            id: "2",
-            name: "Max",
-            species: "Cat",
-            age: 2,
-            ownerName: "Jane Smith",
-            contact: "09876543210",
-        },
-    ])
-
+    const [patients, setPatients] = useState<Patient[]>(() => getStoredPatients())
     const [showForm, setShowForm] = useState(false)
     const [editingPatient, setEditingPatient] = useState<Patient | null>(null)
     const [searchTerm, setSearchTerm] = useState("")
@@ -54,17 +37,10 @@ export default function Patients() {
             p.ownerName.toLowerCase().includes(searchTerm.toLowerCase())
     )
 
-    const handleSave = (data: Omit<Patient, "id">, id?: string) => {
-        if (id) {
-            setPatients((prev) =>
-                prev.map((p) => (p.id === id ? { ...p, ...data } : p))
-            )
-        } else {
-            setPatients((prev) => [
-                ...prev,
-                { id: crypto.randomUUID(), ...data },
-            ])
-        }
+    const handleSave = (newPatient: Patient) => {
+        const updated = [...patients, newPatient]
+        setPatients(updated)
+        savePatients(updated)
     }
 
     const handleEdit = (patient: Patient) => {
