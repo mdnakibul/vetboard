@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useTheme } from "@/hooks/useTheme"
 
 const formSchema = z.object({
     clinicName: z.string().min(1),
@@ -33,6 +34,7 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>
 
 export default function SettingsPage() {
+    const { toggleTheme, theme } = useTheme()
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -126,21 +128,19 @@ export default function SettingsPage() {
                                 )}
                             />
 
-                            <FormField
-                                control={form.control}
-                                name="darkMode"
-                                render={({ field }) => (
-                                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                                        <div className="space-y-0.5">
-                                            <FormLabel>Dark Mode</FormLabel>
-                                            <p className="text-sm text-muted-foreground">Enable dark theme</p>
-                                        </div>
-                                        <FormControl>
-                                            <Switch checked={field.value} onCheckedChange={field.onChange} />
-                                        </FormControl>
-                                    </FormItem>
-                                )}
-                            />
+                            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                                <div className="space-y-0.5">
+                                    <FormLabel>Dark Mode</FormLabel>
+                                    <p className="text-sm text-muted-foreground">Enable dark theme</p>
+                                </div>
+                                <FormControl>
+                                    <Switch
+                                        checked={theme === "dark"}
+                                        onCheckedChange={toggleTheme}
+                                    />
+                                </FormControl>
+                            </FormItem>
+
                         </TabsContent>
 
                         <TabsContent value="preferences">
