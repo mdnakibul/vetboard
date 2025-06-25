@@ -1,11 +1,13 @@
 import { NavLink } from "react-router-dom"
 import { FaPaw, FaUser, FaCalendarAlt, FaCog } from "react-icons/fa"
+import { Stethoscope } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button-variants"
 
 const navItems = [
     { name: "Dashboard", path: "/", icon: <FaPaw /> },
     { name: "Patients", path: "/patients", icon: <FaUser /> },
+    { name: "Medical Record", path: "/medical-records", icon: <Stethoscope /> },
     { name: "Appointments", path: "/appointments", icon: <FaCalendarAlt /> },
     { name: "Settings", path: "/settings", icon: <FaCog /> },
 ]
