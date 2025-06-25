@@ -16,6 +16,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
+import type { Patient } from "../types/patient"
+import { getStoredPatients } from "../lib/storage"
 
 interface Props {
     initialData?: Appointment
@@ -25,11 +27,12 @@ interface Props {
 
 export default function AppointmentForm({ initialData, onSave, onClose }: Props) {
     const [formData, setFormData] = useState<Omit<Appointment, "id">>({
-        patientName: "",
+        patientId: "",
         date: "",
         reason: "",
         status: "Pending",
     })
+    const [patients,] = useState<Patient[]>(getStoredPatients())
 
     useEffect(() => {
         if (initialData) {
@@ -51,7 +54,7 @@ export default function AppointmentForm({ initialData, onSave, onClose }: Props)
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
-        if (!formData.patientName || !formData.date || !formData.reason) {
+        if (!formData.patientId || !formData.date || !formData.reason) {
             alert("All fields are required.")
             return
         }
@@ -68,13 +71,22 @@ export default function AppointmentForm({ initialData, onSave, onClose }: Props)
                     </DialogTitle>
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="space-y-4">
-                    <Input
-                        name="patientName"
-                        value={formData.patientName}
-                        onChange={handleChange}
-                        placeholder="Patient Name"
-                        required
-                    />
+                    <Select
+                        value={formData.patientId}
+                        onValueChange={(value) => setFormData((prev) => ({ ...prev, patientId: value }))}
+                    >
+                        <SelectTrigger>
+                            <SelectValue placeholder="Select Patient" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {patients.map((p) => (
+                                <SelectItem key={p.id} value={p.id}>
+                                    {p.name} ({p.ownerName})
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+
                     <Input
                         type="date"
                         name="date"
