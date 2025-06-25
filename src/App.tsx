@@ -8,18 +8,31 @@ import PatientView from "./pages/PatientView"
 import Login from "@/pages/Login"
 import NotFound from "@/pages/NotFound"
 import MedicalRecords from "./pages/MedicalRecords"
+import ProtectedRoute from "./components/ProtectedRoute"
 // TODO: Review icon library. We have 3 library for icon but how many are actually needed? 
 function App() {
   return (
     <Routes>
+      <Route path="/login" element={<Login />} />
       <Route path="/" element={<MainLayout />}>
-        <Route index element={<Dashboard />} />
-        <Route path="patients" element={<Patients />} />
-        <Route path="appointments" element={<Appointments />} />
-        <Route path="settings" element={<Settings />} />
-        <Route path="/medical-records" element={<MedicalRecords />} />
-        <Route path="/patients/:id" element={<PatientView />} />
-        <Route path="/login" element={<Login />} />
+        <Route index element={<ProtectedRoute>
+          <Dashboard />
+        </ProtectedRoute>} />
+        <Route path="patients" element={<ProtectedRoute>
+          <Patients />
+        </ProtectedRoute>} />
+        <Route path="appointments" element={<ProtectedRoute>
+          <Appointments />
+        </ProtectedRoute>} />
+        <Route path="settings" element={<ProtectedRoute>
+          <Settings />
+        </ProtectedRoute>} />
+        <Route path="/medical-records" element={<ProtectedRoute>
+          <MedicalRecords />
+        </ProtectedRoute>} />
+        <Route path="/patients/:id" element={<ProtectedRoute>
+          <PatientView />
+        </ProtectedRoute>} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
