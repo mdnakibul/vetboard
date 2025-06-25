@@ -5,6 +5,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import type { MedicalRecord } from "@/types/medical-record"
+import { getStoredPatients } from "../lib/storage"
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "./ui/select"
 
 interface Props {
     initialData?: MedicalRecord
@@ -21,6 +23,7 @@ export default function MedicalRecordForm({ initialData, onSave, onClose }: Prop
         treatment: "",
         notes: "",
     })
+    const [patients,] = useState<Patient[]>(() => getStoredPatients())
 
     useEffect(() => {
         if (initialData) {
@@ -51,7 +54,19 @@ export default function MedicalRecordForm({ initialData, onSave, onClose }: Prop
                     <DialogTitle>{initialData ? "Edit" : "Add"} Medical Record</DialogTitle>
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="space-y-3">
-                    <Input name="patientId" value={form.patientId} onChange={handleChange} placeholder="Patient ID" required />
+                    <Select value={form.patientId} onValueChange={(value) => setForm({ ...form, patientId: value })}>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Select Patient" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {patients.map((p) => (
+                                <SelectItem key={p.id} value={p.id}>
+                                    {p.name} ({p.ownerName})
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+
                     <Input name="visitDate" type="date" value={form.visitDate} onChange={handleChange} required />
                     <Input name="symptoms" value={form.symptoms} onChange={handleChange} placeholder="Symptoms" />
                     <Input name="diagnosis" value={form.diagnosis} onChange={handleChange} placeholder="Diagnosis" required />
