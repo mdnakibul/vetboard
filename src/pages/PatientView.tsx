@@ -5,15 +5,19 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import type { Patient } from "@/types/patient"
 import { FiArrowLeft } from "react-icons/fi"
-import { getStoredPatientById } from "../lib/storage"
+import { getAppointmentsByPatientId, getStoredPatientById } from "../lib/storage"
 import type { MedicalRecord } from "../types/medical-record"
 import { getMedicalRecordsByPatientId } from "../lib/medical-records"
+import type { Appointment } from "../types/appointment"
+import { Table, TableCell, TableBody, TableHead, TableRow, TableHeader } from "../components/ui/table"
+import { StatusBadge } from "../components/StatusBadge"
 
 export default function PatientView() {
     const { id } = useParams()
     const navigate = useNavigate()
     const [patient, setPatient] = useState<Patient | null>(null)
     const [medicalRecords, setMedicalRecords] = useState<MedicalRecord | null>(null)
+    const [appointments, setAppointments] = useState<Appointment | null>(getAppointmentsByPatientId(id))
 
     useEffect(() => {
         const found = getStoredPatientById(id)
@@ -21,6 +25,10 @@ export default function PatientView() {
 
         const patientRecords = getMedicalRecordsByPatientId(id)
         setMedicalRecords(patientRecords)
+
+        const patientAppointments = getAppointmentsByPatientId(id)
+        console.log('appointments', patientAppointments);
+        setAppointments(patientAppointments)
     }, [id])
 
     if (!patient) {
@@ -79,6 +87,42 @@ export default function PatientView() {
                     )}
                 </CardContent>
             </Card>
+
+            {/* Appoitment History  */}
+
+            <div className="space-y-2 mt-8">
+                <h3 className="text-lg font-semibold">Appointment History</h3>
+                {appointments.length === 0 ? (
+                    <p className="text-muted-foreground text-sm">No appointments found.</p>
+                ) : (
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Date</TableHead>
+                                <TableHead>Reason</TableHead>
+                                <TableHead>Status</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {appointments.map((appt) => (
+                                <TableRow key={appt.id}>
+                                    <TableCell>{appt.date}</TableCell>
+                                    <TableCell>{appt.reason}</TableCell>
+                                    <TableCell>
+                                        <StatusBadge
+                                            status={
+                                                appt.status
+                                            }
+                                        >
+                                            {appt.status}
+                                        </StatusBadge>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                )}
+            </div>
         </div>
     )
 }
