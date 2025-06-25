@@ -19,14 +19,16 @@ import {
 } from "@/components/ui/table"
 import { Pencil1Icon, TrashIcon } from "@radix-ui/react-icons"
 import { StatusBadge } from "../components/StatusBadge"
-import { getStoredAppointments, saveAppointments } from "../lib/storage"
+import { getStoredAppointments, getStoredPatients, saveAppointments } from "../lib/storage"
 import { generateId } from "../lib/id"
+import type { Patient } from "../types/patient"
 
 export default function Appointments() {
     const [appointments, setAppointments] = useState<Appointment[]>(getStoredAppointments())
 
     const [showForm, setShowForm] = useState(false)
     const [editing, setEditing] = useState<Appointment | null>(null)
+    const [patients,] = useState<Patient[]>(getStoredPatients())
 
     const handleSave = (data: Omit<Appointment, "id">, id?: string) => {
         let updatedAppointments: Appointment[] = []
@@ -64,6 +66,11 @@ export default function Appointments() {
         setAppointments(getStoredAppointments())
     }
 
+    const getPatientName = (id: string) => {
+        const p = patients.find(p => p.id === id)
+        return p ? p.name : "Unknown"
+    }
+
 
     return (
         <div className="space-y-6">
@@ -97,7 +104,7 @@ export default function Appointments() {
                         <TableBody>
                             {appointments.map((a) => (
                                 <TableRow key={a.id}>
-                                    <TableCell>{a.patientName}</TableCell>
+                                    <TableCell>{getPatientName(a.patientId)}</TableCell>
                                     <TableCell>{a.date}</TableCell>
                                     <TableCell>{a.reason}</TableCell>
                                     <TableCell><StatusBadge status={a.status} /></TableCell>
