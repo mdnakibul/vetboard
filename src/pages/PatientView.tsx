@@ -6,15 +6,21 @@ import { Badge } from "@/components/ui/badge"
 import type { Patient } from "@/types/patient"
 import { FiArrowLeft } from "react-icons/fi"
 import { getStoredPatientById } from "../lib/storage"
+import type { MedicalRecord } from "../types/medical-record"
+import { getMedicalRecordsByPatientId } from "../lib/medical-records"
 
 export default function PatientView() {
     const { id } = useParams()
     const navigate = useNavigate()
     const [patient, setPatient] = useState<Patient | null>(null)
+    const [medicalRecords, setMedicalRecords] = useState<MedicalRecord | null>(null)
 
     useEffect(() => {
         const found = getStoredPatientById(id)
         setPatient(found || null)
+
+        const patientRecords = getMedicalRecordsByPatientId(id)
+        setMedicalRecords(patientRecords)
     }, [id])
 
     if (!patient) {
@@ -56,12 +62,12 @@ export default function PatientView() {
                     <CardTitle>Medical History</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    {patient.medicalHistory?.length ? (
-                        patient.medicalHistory.map((record) => (
+                    {medicalRecords?.length ? (
+                        medicalRecords.map((record) => (
                             <div key={record.id} className="mb-4 border-b pb-2">
                                 <div className="flex justify-between items-center mb-1">
-                                    <span className="font-medium">{record.date}</span>
-                                    {record.vet && <Badge variant="outline">{record.vet}</Badge>}
+                                    <span className="font-medium">{record.visitDate}</span>
+                                    {record.vet && <Badge variant="outline">{record.vet || "Dr. Nahid"}</Badge>}
                                 </div>
                                 <p className="text-sm text-muted-foreground">{record.description}</p>
                                 {record.diagnosis && <p className="text-sm">🩺 Diagnosis: {record.diagnosis}</p>}
