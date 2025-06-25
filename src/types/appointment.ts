@@ -1,7 +1,7 @@
 export interface Appointment {
   id: string;
-  patientName: string;
-  date: string; // format: YYYY-MM-DD
+  patientId: string;
+  date: string;
   reason: string;
   status: "Pending" | "Completed" | "Canceled";
 }
