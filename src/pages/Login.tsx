@@ -2,14 +2,21 @@ import { useNavigate } from "react-router-dom"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { login, isLoggedIn } from "@/lib/auth"
+import { useEffect } from "react"
 
 export default function Login() {
     const navigate = useNavigate()
 
-    const handleLogin = (e: React.FormEvent) => {
-        e.preventDefault()
-        // Fake login logic
-        navigate("/dashboard")
+    useEffect(() => {
+        if (isLoggedIn()) {
+            navigate("/")
+        }
+    }, [navigate])
+
+    const handleLogin = () => {
+        login()
+        navigate("/")
     }
 
     return (
