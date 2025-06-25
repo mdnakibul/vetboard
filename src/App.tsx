@@ -7,6 +7,7 @@ import MainLayout from "./layouts/MainLayout"
 import PatientView from "./pages/PatientView"
 import Login from "@/pages/Login"
 import NotFound from "@/pages/NotFound"
+import MedicalRecords from "./pages/MedicalRecords"
 // TODO: Review icon library. We have 3 library for icon but how many are actually needed? 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="patients" element={<Patients />} />
         <Route path="appointments" element={<Appointments />} />
         <Route path="settings" element={<Settings />} />
+        <Route path="/medical-records" element={<MedicalRecords />} />
         <Route path="/patients/:id" element={<PatientView />} />
         <Route path="/login" element={<Login />} />
         <Route path="*" element={<NotFound />} />
