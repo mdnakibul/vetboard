@@ -31,3 +31,8 @@ export function getStoredAppointments(): Appointment[] {
 export function saveAppointments(data: Appointment[]) {
   localStorage.setItem(STORAGE_KEYS.appointments, JSON.stringify(data));
 }
+
+export function getAppointmentsByPatientId(patientId: string): Appointment[] {
+  const all = getStoredAppointments();
+  return all.filter((appt) => appt.patientId === patientId);
+}
