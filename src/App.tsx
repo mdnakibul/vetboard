@@ -33,8 +33,8 @@ function App() {
         <Route path="/patients/:id" element={<ProtectedRoute>
           <PatientView />
         </ProtectedRoute>} />
-        <Route path="*" element={<NotFound />} />
       </Route>
+      <Route path="*" element={<NotFound />} />
     </Routes>
   )
 }
