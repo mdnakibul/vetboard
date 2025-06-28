@@ -8,7 +8,7 @@ export default function NotFound() {
                 Sorry, we couldn’t find the page you were looking for.
             </p>
             <Link
-                to="/dashboard"
+                to="/"
                 className="text-primary underline hover:opacity-80"
             >
                 ← Back to Dashboard
