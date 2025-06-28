@@ -11,6 +11,7 @@ import { getMedicalRecordsByPatientId } from "../lib/medical-records"
 import type { Appointment } from "../types/appointment"
 import { Table, TableCell, TableBody, TableHead, TableRow, TableHeader } from "../components/ui/table"
 import { StatusBadge } from "../components/StatusBadge"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs"
 
 export default function PatientView() {
     const { id } = useParams()
@@ -27,7 +28,6 @@ export default function PatientView() {
         setMedicalRecords(patientRecords)
 
         const patientAppointments = getAppointmentsByPatientId(id)
-        console.log('appointments', patientAppointments);
         setAppointments(patientAppointments)
     }, [id])
 
@@ -51,78 +51,95 @@ export default function PatientView() {
                 </Button>
             </div>
 
-            {/* Patient Info */}
-            <Card>
-                <CardHeader>
-                    <CardTitle>Basic Info</CardTitle>
-                </CardHeader>
-                <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <p><strong>Species:</strong> {patient.species}</p>
-                    <p><strong>Age:</strong> {patient.age}</p>
-                    <p><strong>Owner:</strong> {patient.ownerName}</p>
-                    <p><strong>Contact:</strong> {patient.contact}</p>
-                </CardContent>
-            </Card>
 
-            {/* Medical History */}
-            <Card>
-                <CardHeader>
-                    <CardTitle>Medical History</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    {medicalRecords?.length ? (
-                        medicalRecords.map((record) => (
-                            <div key={record.id} className="mb-4 border-b pb-2">
-                                <div className="flex justify-between items-center mb-1">
-                                    <span className="font-medium">{record.visitDate}</span>
-                                    {record.vet && <Badge variant="outline">{record.vet || "Dr. Nahid"}</Badge>}
-                                </div>
-                                <p className="text-sm text-muted-foreground">{record.description}</p>
-                                {record.diagnosis && <p className="text-sm">🩺 Diagnosis: {record.diagnosis}</p>}
-                                {record.treatment && <p className="text-sm">💊 Treatment: {record.treatment}</p>}
-                            </div>
-                        ))
-                    ) : (
-                        <p className="text-muted-foreground">No medical records yet.</p>
-                    )}
-                </CardContent>
-            </Card>
 
-            {/* Appoitment History  */}
+            <Tabs defaultValue="info" className="w-full">
+                <TabsList className="grid w-full grid-cols-3">
+                    <TabsTrigger value="info">Basic Info</TabsTrigger>
+                    <TabsTrigger value="medical">Medical History</TabsTrigger>
+                    <TabsTrigger value="appointments">Appointments</TabsTrigger>
+                </TabsList>
 
-            <div className="space-y-2 mt-8">
-                <h3 className="text-lg font-semibold">Appointment History</h3>
-                {appointments.length === 0 ? (
-                    <p className="text-muted-foreground text-sm">No appointments found.</p>
-                ) : (
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>Date</TableHead>
-                                <TableHead>Reason</TableHead>
-                                <TableHead>Status</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {appointments.map((appt) => (
-                                <TableRow key={appt.id}>
-                                    <TableCell>{appt.date}</TableCell>
-                                    <TableCell>{appt.reason}</TableCell>
-                                    <TableCell>
-                                        <StatusBadge
-                                            status={
-                                                appt.status
-                                            }
-                                        >
-                                            {appt.status}
-                                        </StatusBadge>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                )}
-            </div>
+                <TabsContent value="info">
+                    {/* Patient Info */}
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Basic Info</CardTitle>
+                        </CardHeader>
+                        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <p><strong>Species:</strong> {patient.species}</p>
+                            <p><strong>Age:</strong> {patient.age}</p>
+                            <p><strong>Owner:</strong> {patient.ownerName}</p>
+                            <p><strong>Contact:</strong> {patient.contact}</p>
+                        </CardContent>
+                    </Card>
+                </TabsContent>
+                <TabsContent value="medical">            {/* Medical History */}
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Medical History</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            {medicalRecords?.length ? (
+                                medicalRecords.map((record) => (
+                                    <div key={record.id} className="mb-4 border-b pb-2">
+                                        <div className="flex justify-between items-center mb-1">
+                                            <span className="font-medium">{record.visitDate}</span>
+                                            {record.vet && <Badge variant="outline">{record.vet || "Dr. Nahid"}</Badge>}
+                                        </div>
+                                        <p className="text-sm text-muted-foreground">{record.description}</p>
+                                        {record.diagnosis && <p className="text-sm">🩺 Diagnosis: {record.diagnosis}</p>}
+                                        {record.treatment && <p className="text-sm">💊 Treatment: {record.treatment}</p>}
+                                    </div>
+                                ))
+                            ) : (
+                                <p className="text-muted-foreground">No medical records yet.</p>
+                            )}
+                        </CardContent>
+                    </Card>
+                </TabsContent>
+                <TabsContent value="appointments">
+                    {/* Appoitment History  */}
+                    <div className="space-y-2 mt-8">
+                        <h3 className="text-lg font-semibold">Appointment History</h3>
+                        {appointments.length === 0 ? (
+                            <p className="text-muted-foreground text-sm">No appointments found.</p>
+                        ) : (
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>Date</TableHead>
+                                        <TableHead>Reason</TableHead>
+                                        <TableHead>Status</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {appointments.map((appt) => (
+                                        <TableRow key={appt.id}>
+                                            <TableCell>{appt.date}</TableCell>
+                                            <TableCell>{appt.reason}</TableCell>
+                                            <TableCell>
+                                                <StatusBadge
+                                                    status={
+                                                        appt.status
+                                                    }
+                                                >
+                                                    {appt.status}
+                                                </StatusBadge>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        )}
+                    </div>
+                </TabsContent>
+            </Tabs>
+
+
+
+
+
         </div>
     )
 }
