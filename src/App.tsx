@@ -9,6 +9,7 @@ import Login from "@/pages/Login"
 import NotFound from "@/pages/NotFound"
 import MedicalRecords from "./pages/MedicalRecords"
 import ProtectedRoute from "./components/ProtectedRoute"
+import Invoices from "./pages/Invoices"
 // TODO: Review icon library. We have 3 library for icon but how many are actually needed? 
 function App() {
   return (
@@ -32,6 +33,9 @@ function App() {
         </ProtectedRoute>} />
         <Route path="/patients/:id" element={<ProtectedRoute>
           <PatientView />
+        </ProtectedRoute>} />
+        <Route path="/invoices" element={<ProtectedRoute>
+          <Invoices />
         </ProtectedRoute>} />
       </Route>
       <Route path="*" element={<NotFound />} />
