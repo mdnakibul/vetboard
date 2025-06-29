@@ -5,8 +5,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import InvoiceForm from "@/components/InvoiceForm"
 import type { Invoice } from "@/types/invoice"
 import { getStoredInvoices, saveInvoices } from "@/lib/invoice-storage"
-import { generateId } from "../lib/id"
-import { StatusBadge } from "../components/StatusBadge"
+import { generateId } from "@/lib/id"
+import { StatusBadge } from "@/components/StatusBadge"
+import { deleteInvoice } from "@/lib/invoice-storage"
 
 export default function InvoicesPage() {
     const [invoices, setInvoices] = useState<Invoice[]>([])
@@ -36,6 +37,14 @@ export default function InvoicesPage() {
     const handleEdit = (invoice: Invoice) => {
         setEditingInvoice(invoice)
         setShowForm(true)
+    }
+
+    const handleDelete = (invoiceId: string) => {
+        const isConfirmed = window.confirm('Are you sure to delete this invoice?')
+        if (isConfirmed) {
+            deleteInvoice(invoiceId)
+            setInvoices(getStoredInvoices())
+        }
     }
 
     return (
@@ -81,9 +90,14 @@ export default function InvoicesPage() {
                                         <StatusBadge status={inv.status} />
                                     </TableCell>
                                     <TableCell>
-                                        <Button variant="link" size="sm" onClick={() => handleEdit(inv)}>
-                                            Edit
-                                        </Button>
+                                        <div className="flex gap-2">
+                                            <Button variant="secondary" size="sm" onClick={() => handleEdit(inv)}>
+                                                Edit
+                                            </Button>
+                                            <Button variant="destructive" size="sm" onClick={() => handleDelete(inv.id)}>
+                                                Delete
+                                            </Button>
+                                        </div>
                                     </TableCell>
                                 </TableRow>
                             ))}
