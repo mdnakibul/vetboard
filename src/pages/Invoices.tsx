@@ -8,12 +8,14 @@ import { getStoredInvoices, saveInvoices } from "@/lib/invoice-storage"
 import { generateId } from "@/lib/id"
 import { StatusBadge } from "@/components/StatusBadge"
 import { deleteInvoice } from "@/lib/invoice-storage"
-import { getStoredPatients } from "../lib/storage"
+import { getStoredPatients } from "@/lib/storage"
+import InvoiceView from "@/components/InvoiceView"
 
 export default function InvoicesPage() {
     const [invoices, setInvoices] = useState<Invoice[]>([])
     const [showForm, setShowForm] = useState(false)
     const [editingInvoice, setEditingInvoice] = useState<Invoice | null>(null)
+    const [viewingInvoice, setViewingInvoice] = useState<Invoice | null>(null)
 
     useEffect(() => {
         populateInvoicesWithPatientName()
@@ -107,6 +109,13 @@ export default function InvoicesPage() {
                                     </TableCell>
                                     <TableCell>
                                         <div className="flex gap-2">
+                                            <Button
+                                                variant="link"
+                                                size="sm"
+                                                onClick={() => setViewingInvoice(inv)}
+                                            >
+                                                View
+                                            </Button>
                                             <Button variant="secondary" size="sm" onClick={() => handleEdit(inv)}>
                                                 Edit
                                             </Button>
@@ -129,6 +138,11 @@ export default function InvoicesPage() {
                     onClose={() => setShowForm(false)}
                 />
             )}
+
+            {viewingInvoice && (
+                <InvoiceView invoice={viewingInvoice} onClose={() => setViewingInvoice(null)} />
+            )}
+
         </div>
     )
 }
