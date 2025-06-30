@@ -94,7 +94,7 @@ export default function InvoicesPage() {
                                             <Button variant="secondary" size="sm" onClick={() => handleEdit(inv)}>
                                                 Edit
                                             </Button>
-                                            <Button variant="destructive" size="sm" onClick={() => handleDelete(inv.id)}>
+                                            <Button variant="destructive" size="sm" onClick={() => handleDelete(inv.id)} className="text-white">
                                                 Delete
                                             </Button>
                                         </div>
