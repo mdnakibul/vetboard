@@ -8,6 +8,7 @@ import { getStoredInvoices, saveInvoices } from "@/lib/invoice-storage"
 import { generateId } from "@/lib/id"
 import { StatusBadge } from "@/components/StatusBadge"
 import { deleteInvoice } from "@/lib/invoice-storage"
+import { getStoredPatients } from "../lib/storage"
 
 export default function InvoicesPage() {
     const [invoices, setInvoices] = useState<Invoice[]>([])
@@ -15,8 +16,21 @@ export default function InvoicesPage() {
     const [editingInvoice, setEditingInvoice] = useState<Invoice | null>(null)
 
     useEffect(() => {
-        setInvoices(getStoredInvoices())
+        populateInvoicesWithPatientName()
     }, [])
+
+    const populateInvoicesWithPatientName = () => {
+        const invoices = getStoredInvoices()
+        const patients = getStoredPatients()
+        const populatedInvoices = invoices.map(invoice => {
+            const patientDetails = patients.find(patient => patient.id === invoice.patientId)
+            return ({
+                ...invoice,
+                patientName: patientDetails.name || ''
+            })
+        })
+        setInvoices(populatedInvoices)
+    }
 
     const handleSave = (data: Omit<Invoice, "id">, id?: string) => {
         let updatedInvoices: Invoice[] = []
@@ -66,7 +80,8 @@ export default function InvoicesPage() {
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead>Patient</TableHead>
+                                <TableHead>Patient Id</TableHead>
+                                <TableHead>Patient Name</TableHead>
                                 <TableHead>Date</TableHead>
                                 <TableHead>Total</TableHead>
                                 <TableHead>Status</TableHead>
@@ -84,6 +99,7 @@ export default function InvoicesPage() {
                             {invoices.map((inv) => (
                                 <TableRow key={inv.id}>
                                     <TableCell>{inv.patientId}</TableCell>
+                                    <TableCell>{inv.patientName}</TableCell>
                                     <TableCell>{inv.date}</TableCell>
                                     <TableCell>৳ {inv.total}</TableCell>
                                     <TableCell>
