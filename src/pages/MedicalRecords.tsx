@@ -12,11 +12,14 @@ import { Button } from "@/components/ui/button"
 import { getStoredMedicalRecords, saveMedicalRecords } from "@/lib/medical-records.ts"
 import MedicalRecordForm from "@/components/MedicalRecordForm"
 import { generateId } from "@/lib/id"
+import PrescriptionViewer from "@/components/PrescriptionViewer"
 
 export default function MedicalRecords() {
     const [records, setRecords] = useState<MedicalRecord[]>([])
     const [showForm, setShowForm] = useState(false)
     const [editing, setEditing] = useState<MedicalRecord | null>(null)
+    const [selectedPrescriptions, setSelectedPrescriptions] = useState<Prescription[]>([])
+    const [prescriptionModalOpen, setPrescriptionModalOpen] = useState(false)
 
     const handleSave = (data: Omit<MedicalRecord, "id">, id?: string) => {
         let updated: MedicalRecord[]
@@ -35,6 +38,11 @@ export default function MedicalRecords() {
             saveMedicalRecords(updated)
             setRecords(updated)
         }
+    }
+
+    const handleViewPrescription = (record: MedicalRecord) => {
+        setSelectedPrescriptions(record.prescriptions)
+        setPrescriptionModalOpen(true)
     }
 
     useEffect(() => {
@@ -63,7 +71,24 @@ export default function MedicalRecords() {
                                 <p><strong>Symptoms:</strong> {record.symptoms}</p>
                                 <p><strong>Treatment:</strong> {record.treatment}</p>
                                 {record.notes && <p><strong>Notes:</strong> {record.notes}</p>}
+                                {/* Show prescriptions inline if they exist */}
+                                {record.prescriptions?.length > 0 && (
+                                    <div className="mt-2 space-y-2">
+                                        <div className="text-sm font-medium">Prescriptions:</div>
+                                        {record.prescriptions.map((p, i) => (
+                                            <div key={p.id} className="pl-3 border-l text-sm">
+                                                <strong>{i + 1}. {p.medicine}</strong> – {p.dosage}, {p.frequency}, {p.duration}
+                                                {p.notes && <div className="text-xs text-muted-foreground">Note: {p.notes}</div>}
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
                                 <div className="pt-2 flex gap-2">
+                                    <Button
+                                        onClick={() => handleViewPrescription(record)}
+                                        variant="secondary">
+                                        View Prescription
+                                    </Button>
                                     <Button
                                         variant="outline"
                                         size="sm"
@@ -88,6 +113,13 @@ export default function MedicalRecords() {
                     ))}
                 </div>
             )}
+
+            <PrescriptionViewer
+                open={prescriptionModalOpen}
+                onClose={() => setPrescriptionModalOpen(false)}
+                prescriptions={selectedPrescriptions}
+            />
+
 
             {showForm && (
                 <MedicalRecordForm
