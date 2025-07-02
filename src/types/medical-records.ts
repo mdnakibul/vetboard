@@ -1,3 +1,5 @@
+import type { Prescription } from "./prescription";
+
 // types/patient.ts
 export type MedicalRecord = {
   id: string;
@@ -6,4 +8,5 @@ export type MedicalRecord = {
   diagnosis?: string;
   treatment?: string;
   vet?: string;
+  prescriptions: Prescription[];
 };
