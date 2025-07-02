@@ -5,13 +5,14 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import type { Patient } from "@/types/patient"
 import { FiArrowLeft } from "react-icons/fi"
-import { getAppointmentsByPatientId, getStoredPatientById } from "../lib/storage"
-import type { MedicalRecord } from "../types/medical-record"
-import { getMedicalRecordsByPatientId } from "../lib/medical-records"
-import type { Appointment } from "../types/appointment"
-import { Table, TableCell, TableBody, TableHead, TableRow, TableHeader } from "../components/ui/table"
-import { StatusBadge } from "../components/StatusBadge"
+import { getAppointmentsByPatientId, getStoredPatientById } from "@/lib/storage"
+import type { MedicalRecord } from "@/types/medical-record"
+import { getMedicalRecordsByPatientId } from "@/lib/medical-records"
+import type { Appointment } from "@/types/appointment"
+import { Table, TableCell, TableBody, TableHead, TableRow, TableHeader } from "@/components/ui/table"
+import { StatusBadge } from "@/components/StatusBadge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs"
+import PrescriptionViewer from "@/components/PrescriptionViewer"
 
 export default function PatientView() {
     const { id } = useParams()
@@ -19,6 +20,14 @@ export default function PatientView() {
     const [patient, setPatient] = useState<Patient | null>(null)
     const [medicalRecords, setMedicalRecords] = useState<MedicalRecord | null>(null)
     const [appointments, setAppointments] = useState<Appointment | null>(getAppointmentsByPatientId(id))
+    const [selectedPrescriptions, setSelectedPrescriptions] = useState<Prescription[]>([])
+    const [prescriptionModalOpen, setPrescriptionModalOpen] = useState(false)
+
+    const handleViewPrescription = (record: MedicalRecord) => {
+        if (!record.prescriptions?.length) return
+        setSelectedPrescriptions(record.prescriptions)
+        setPrescriptionModalOpen(true)
+    }
 
     useEffect(() => {
         const found = getStoredPatientById(id)
@@ -90,6 +99,17 @@ export default function PatientView() {
                                         <p className="text-sm text-muted-foreground">{record.description}</p>
                                         {record.diagnosis && <p className="text-sm">🩺 Diagnosis: {record.diagnosis}</p>}
                                         {record.treatment && <p className="text-sm">💊 Treatment: {record.treatment}</p>}
+                                        {/* ✅ View Prescription button if prescriptions exist */}
+                                        {record.prescriptions?.length > 0 && (
+                                            <Button
+                                                size="sm"
+                                                variant="outline"
+                                                className="mt-2"
+                                                onClick={() => handleViewPrescription(record)}
+                                            >
+                                                View Prescription
+                                            </Button>
+                                        )}
                                     </div>
                                 ))
                             ) : (
@@ -137,7 +157,11 @@ export default function PatientView() {
             </Tabs>
 
 
-
+            <PrescriptionViewer
+                open={prescriptionModalOpen}
+                onClose={() => setPrescriptionModalOpen(false)}
+                prescriptions={selectedPrescriptions}
+            />
 
 
         </div>
