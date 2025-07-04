@@ -1,4 +1,4 @@
-import type { Prescription } from "./prescription";
+import type { Prescription } from "./prescriptionType";
 
 // types/patient.ts
 export type MedicalRecord = {
