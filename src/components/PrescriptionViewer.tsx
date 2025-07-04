@@ -2,7 +2,7 @@
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import type { Prescription } from "@/types/prescription"
+import type { Prescription } from "@/types/prescriptionType"
 
 interface Props {
     open: boolean
