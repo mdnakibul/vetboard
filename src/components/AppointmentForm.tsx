@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/select"
 import type { Patient } from "../types/patient"
 import { getStoredPatients } from "../lib/storage"
+import { DialogDescription } from "./ui/dialog"
 
 interface Props {
     initialData?: Appointment
@@ -65,6 +66,10 @@ export default function AppointmentForm({ initialData, onSave, onClose }: Props)
     return (
         <Dialog open onOpenChange={onClose}>
             <DialogContent className="sm:max-w-md">
+                <DialogDescription className="sr-only">
+                    This dialog displays a form for patient appointment.
+                </DialogDescription>
+
                 <DialogHeader>
                     <DialogTitle>
                         {initialData ? "Edit Appointment" : "New Appointment"}
