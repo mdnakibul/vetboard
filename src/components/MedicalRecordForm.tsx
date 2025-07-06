@@ -9,6 +9,7 @@ import { getStoredPatients } from "../lib/storage"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "./ui/select"
 import { Label } from "./ui/label"
 import { generateId } from "../lib/id"
+import { DialogDescription } from "./ui/dialog"
 
 interface Props {
     initialData?: MedicalRecord
@@ -148,6 +149,11 @@ export default function MedicalRecordForm({ initialData, onSave, onClose }: Prop
                             <DialogTitle>{initialData ? "Edit" : "Add"} Medical Record</DialogTitle>
                         </DialogHeader>
                     </div>
+
+                    <DialogDescription className="sr-only">
+                        This dialog displays a form to create a medical record for the patient.
+                    </DialogDescription>
+
 
                     {/* Scrollable Form Body */}
                     <div className="flex-1 overflow-y-auto px-6 pb-6 pt-3 space-y-3">
