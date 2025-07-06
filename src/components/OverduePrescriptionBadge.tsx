@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { getMedicalRecordsByPatientId } from "@/lib/medical-records"
+import { DialogDescription } from "./ui/dialog"
 
 interface Props {
   patientId: string
@@ -59,6 +60,10 @@ export function OverduePrescriptionBadge({ patientId }: Props) {
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-lg">
+          <DialogDescription className="sr-only">
+            This dialog displays a prescription that has been overdue.
+          </DialogDescription>
+
           <DialogHeader>
             <DialogTitle>Overdue Prescriptions</DialogTitle>
           </DialogHeader>
