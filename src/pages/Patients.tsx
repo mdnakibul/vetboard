@@ -22,6 +22,7 @@ import { useNavigate } from "react-router-dom"
 import { EyeOpenIcon } from "@radix-ui/react-icons"
 import { getStoredPatients, savePatients } from "@/lib/storage"
 import { generateId } from "@/lib/id"
+import { OverduePrescriptionBadge } from "../components/OverduePrescriptionBadge"
 
 
 export default function Patients() {
@@ -122,7 +123,12 @@ export default function Patients() {
                             ) : (
                                 filteredPatients.map((patient) => (
                                     <TableRow key={patient.id}>
-                                        <TableCell>{patient.name}</TableCell>
+                                        <TableCell>
+                                            {patient.name}
+                                            <OverduePrescriptionBadge
+                                                patientId={patient.id}
+                                            />
+                                        </TableCell>
                                         <TableCell>{patient.species}</TableCell>
                                         <TableCell>{patient.age}</TableCell>
                                         <TableCell>{patient.ownerName}</TableCell>
