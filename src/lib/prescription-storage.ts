@@ -11,3 +11,11 @@ export function getPrescriptionsByPatient(patientId: string) {
       }))
     );
 }
+export function getPrescriptionById(prescriptionId: string) {
+  const medicalRecords = getStoredMedicalRecords();
+  for (const mr of medicalRecords) {
+    const match = mr.prescriptions?.find((p) => p.id === prescriptionId);
+    if (match) return match;
+  }
+  return {};
+}
