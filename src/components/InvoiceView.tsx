@@ -5,6 +5,7 @@ import { getStoredPatientById } from "@/lib/storage"
 import { useRef } from "react"
 import { InvoicePrint } from "@/components/InvoicePrint"
 import { useReactToPrint } from "react-to-print"
+import { DialogDescription } from "./ui/dialog"
 interface Props {
     invoice: Invoice
     onClose: () => void
@@ -19,6 +20,10 @@ export default function InvoiceView({ invoice, onClose }: Props) {
     return (
         <Dialog open onOpenChange={onClose}>
             <DialogContent className="max-w-xl">
+                <DialogDescription className="sr-only">
+                    This dialog displays a preview of an invoice.
+                </DialogDescription>
+
                 <DialogHeader>
                     <DialogTitle>Invoice Details</DialogTitle>
                 </DialogHeader>
