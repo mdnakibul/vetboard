@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 import SampleVetLogo from '/sample_vet_clinic_logo.jpg'
 import { getPrescriptionById } from "../lib/prescription-storage";
+import { DialogDescription } from "./ui/dialog";
 
 // Print-specific styles
 const printStyles = `
@@ -50,6 +51,10 @@ export const PrescriptionPrintModal = ({ open, onClose, prescription, patient })
             <style>{printStyles}</style>
             <Dialog open={open} onOpenChange={onClose}>
                 <DialogContent className="w-full max-w-[90vw] sm:max-w-[800px] lg:max-w-[1000px] max-h-[90vh] overflow-y-auto overflow-x-auto">
+                    <DialogDescription className="sr-only">
+                        This dialog displays a printable prescription for the patient.
+                    </DialogDescription>
+
                     <DialogHeader className="no-print">
                         <DialogTitle>Prescription Preview</DialogTitle>
                     </DialogHeader>
