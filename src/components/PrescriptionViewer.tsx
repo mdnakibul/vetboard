@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { PrescriptionPrintModal } from './PrescriptionPrintModal';
 import type { Prescription } from '../types/prescriptionType';
 import type { Patient } from '../types/patient';
+import { DialogDescription } from './ui/dialog';
 
 
 interface Props {
@@ -33,6 +34,9 @@ const PrescriptionViewer = ({
         <div className="p-6 max-w-5xl">
             <Dialog open={open} onOpenChange={onClose}>
                 <DialogContent className="max-w-5xl">
+                    <DialogDescription className="sr-only">
+                        This dialog displays prescriptions of a medical record.
+                    </DialogDescription>
                     <DialogHeader>
                         <DialogTitle>Prescriptions</DialogTitle>
                     </DialogHeader>
