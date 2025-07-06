@@ -51,6 +51,10 @@ export default function PatientForm({ initialData, onSave, onClose }: Props) {
     return (
         <Dialog open onOpenChange={onClose}>
             <DialogContent>
+                <DialogDescription className="sr-only">
+                    This dialog displays information about a patient.
+                </DialogDescription>
+
                 <DialogHeader>
                     <DialogTitle>{initialData ? "Edit" : "Add"} Patient</DialogTitle>
                 </DialogHeader>
