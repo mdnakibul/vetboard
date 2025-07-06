@@ -13,6 +13,7 @@ import { getStoredMedicalRecords, saveMedicalRecords } from "@/lib/medical-recor
 import MedicalRecordForm from "@/components/MedicalRecordForm"
 import { generateId } from "@/lib/id"
 import PrescriptionViewer from "@/components/PrescriptionViewer"
+import { getStoredPatientById } from "../lib/storage"
 
 export default function MedicalRecords() {
     const [records, setRecords] = useState<MedicalRecord[]>([])
@@ -41,6 +42,13 @@ export default function MedicalRecords() {
     }
 
     const handleViewPrescription = (record: MedicalRecord) => {
+        const patient = getStoredPatientById(record.patientId)
+        if (record.prescriptions) {
+            record.prescriptions.forEach(prescription => {
+                prescription.patient = patient
+                prescription.visitDate = record.visitDate
+            })
+        }
         setSelectedPrescriptions(record.prescriptions)
         setPrescriptionModalOpen(true)
     }
@@ -71,22 +79,18 @@ export default function MedicalRecords() {
                                 <p><strong>Symptoms:</strong> {record.symptoms}</p>
                                 <p><strong>Treatment:</strong> {record.treatment}</p>
                                 {record.notes && <p><strong>Notes:</strong> {record.notes}</p>}
+
                                 {/* Show prescriptions inline if they exist */}
-                                {record.prescriptions?.length > 0 && (
-                                    <div className="mt-2 space-y-2">
-                                        <div className="text-sm font-medium">Prescriptions:</div>
-                                        {record.prescriptions.map((p, i) => (
-                                            <div key={p.id} className="pl-3 border-l text-sm">
-                                                <strong>{i + 1}. {p.medicine}</strong> – {p.dosage}, {p.frequency}, {p.duration}
-                                                {p.notes && <div className="text-xs text-muted-foreground">Note: {p.notes}</div>}
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-                                <div className="pt-2 flex gap-2">
+                                <div className="mt-2 space-y-3">
+                                    <div className="text-sm font-medium">Total prescriptions: {record.prescriptions?.length || 0}</div>
+                                </div>
+
+                                {/* Action Buttons */}
+                                <div className="pt-2 flex flex-wrap gap-2">
                                     <Button
                                         onClick={() => handleViewPrescription(record)}
-                                        variant="secondary">
+                                        variant="secondary"
+                                    >
                                         View Prescription
                                     </Button>
                                     <Button
@@ -112,12 +116,15 @@ export default function MedicalRecords() {
                         </Card>
                     ))}
                 </div>
+
             )}
 
             <PrescriptionViewer
                 open={prescriptionModalOpen}
                 onClose={() => setPrescriptionModalOpen(false)}
                 prescriptions={selectedPrescriptions}
+                visitDate={selectedPrescriptions?.length ? selectedPrescriptions[0].visitDate : ''}
+                patient={selectedPrescriptions?.length ? selectedPrescriptions[0].patient : {}}
             />
 
 
