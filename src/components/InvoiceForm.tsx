@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { DialogDescription } from "./ui/dialog"
 
 interface Props {
     initialData?: Invoice
@@ -79,6 +80,10 @@ export default function InvoiceForm({ initialData, onSave, onClose }: Props) {
     return (
         <Dialog open onOpenChange={onClose}>
             <DialogContent className="max-w-2xl">
+                <DialogDescription className="sr-only">
+                    This dialog displays a form to generate invoice.
+                </DialogDescription>
+
                 <DialogHeader>
                     <DialogTitle>{initialData ? "Edit Invoice" : "New Invoice"}</DialogTitle>
                 </DialogHeader>
