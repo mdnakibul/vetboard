@@ -12,6 +12,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { DialogDescription } from "./ui/dialog"
+import type { InvoiceItem } from "../types/invoice"
+import type { Patient } from "../types/patient"
 
 interface Props {
     initialData?: Invoice
@@ -62,7 +64,7 @@ export default function InvoiceForm({ initialData, onSave, onClose }: Props) {
     }
 
     const removeItem = (index: number) => {
-        const updatedItems = formData.items.filter((_, i) => i !== index)
+        const updatedItems = formData.items.filter((_: InvoiceItem, i: number) => i !== index)
         setFormData((prev) => ({ ...prev, items: updatedItems }))
         updateTotal(updatedItems)
     }
@@ -93,13 +95,15 @@ export default function InvoiceForm({ initialData, onSave, onClose }: Props) {
                             <Label>Patient</Label>
                             <Select
                                 value={formData.patientId}
-                                onValueChange={(val) => setFormData((prev) => ({ ...prev, patientId: val }))}
+                                onValueChange={(val: string) =>
+                                    setFormData((prev) => ({ ...prev, patientId: val }))
+                                }
                             >
                                 <SelectTrigger>
                                     <SelectValue placeholder="Select patient" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {patients.map((p) => (
+                                    {patients.map((p: Patient) => (
                                         <SelectItem key={p.id} value={p.id}>
                                             {p.name}
                                         </SelectItem>
@@ -112,7 +116,7 @@ export default function InvoiceForm({ initialData, onSave, onClose }: Props) {
                             <Input
                                 type="date"
                                 value={formData.date}
-                                onChange={(e) =>
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                                     setFormData((prev) => ({ ...prev, date: e.target.value }))
                                 }
                                 required
@@ -122,26 +126,26 @@ export default function InvoiceForm({ initialData, onSave, onClose }: Props) {
 
                     <div className="space-y-4">
                         <Label>Items</Label>
-                        {formData.items.map((item, index) => (
+                        {formData.items.map((item: InvoiceItem, index: number) => (
                             <div key={index} className="grid grid-cols-1 md:grid-cols-4 gap-3 items-center">
                                 <Input
                                     placeholder="Description"
                                     value={item.description}
-                                    onChange={(e) => handleItemChange(index, "description", e.target.value)}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleItemChange(index, "description", e.target.value)}
                                     required
                                 />
                                 <Input
                                     type="number"
                                     placeholder="Quantity"
                                     value={item.quantity}
-                                    onChange={(e) => handleItemChange(index, "quantity", Number(e.target.value))}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleItemChange(index, "quantity", Number(e.target.value))}
                                     required
                                 />
                                 <Input
                                     type="number"
                                     placeholder="Unit Price"
                                     value={item.unitPrice}
-                                    onChange={(e) => handleItemChange(index, "unitPrice", Number(e.target.value))}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleItemChange(index, "unitPrice", Number(e.target.value))}
                                     required
                                 />
                                 <Button type="button" variant="ghost" onClick={() => removeItem(index)}>
@@ -159,7 +163,7 @@ export default function InvoiceForm({ initialData, onSave, onClose }: Props) {
                             <Label>Status</Label>
                             <Select
                                 value={formData.status}
-                                onValueChange={(val) =>
+                                onValueChange={(val: Invoice["status"]) =>
                                     setFormData((prev) => ({ ...prev, status: val as Invoice["status"] }))
                                 }
                             >

@@ -19,6 +19,8 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useTheme } from "@/hooks/useTheme"
+import type { ControllerRenderProps } from "react-hook-form";
+import type { Theme } from "../contexts/theme-context-value"
 
 const formSchema = z.object({
     clinicName: z.string().min(1),
@@ -70,7 +72,9 @@ export default function SettingsPage() {
                             <FormField
                                 control={form.control}
                                 name="clinicName"
-                                render={({ field }) => (
+                                render={({ field }: {
+                                    field: ControllerRenderProps<string>; // specify generics as needed
+                                }) => (
                                     <FormItem>
                                         <FormLabel>Clinic Name</FormLabel>
                                         <FormControl><Input {...field} /></FormControl>
@@ -82,7 +86,9 @@ export default function SettingsPage() {
                             <FormField
                                 control={form.control}
                                 name="address"
-                                render={({ field }) => (
+                                render={({ field }: {
+                                    field: ControllerRenderProps<string>; // specify generics as needed
+                                }) => (
                                     <FormItem>
                                         <FormLabel>Address</FormLabel>
                                         <FormControl><Input {...field} /></FormControl>
@@ -93,7 +99,9 @@ export default function SettingsPage() {
                             <FormField
                                 control={form.control}
                                 name="contact"
-                                render={({ field }) => (
+                                render={({ field }: {
+                                    field: ControllerRenderProps<string>; // specify generics as needed
+                                }) => (
                                     <FormItem>
                                         <FormLabel>Contact</FormLabel>
                                         <FormControl><Input {...field} /></FormControl>
@@ -106,7 +114,9 @@ export default function SettingsPage() {
                             <FormField
                                 control={form.control}
                                 name="userName"
-                                render={({ field }) => (
+                                render={({ field }: {
+                                    field: ControllerRenderProps<string>; // specify generics as needed
+                                }) => (
                                     <FormItem>
                                         <FormLabel>Your Name</FormLabel>
                                         <FormControl><Input {...field} /></FormControl>
@@ -118,7 +128,9 @@ export default function SettingsPage() {
                             <FormField
                                 control={form.control}
                                 name="email"
-                                render={({ field }) => (
+                                render={({ field }: {
+                                    field: ControllerRenderProps<string>; // specify generics as needed
+                                }) => (
                                     <FormItem>
                                         <FormLabel>Email</FormLabel>
                                         <FormControl><Input {...field} /></FormControl>
@@ -148,23 +160,25 @@ export default function SettingsPage() {
                         <TabsContent value="preferences">
                             <FormField
                                 control={form.control}
-                                name="appointmentDuration"
-                                render={({ field }) => (
+                                name="timeFormat"
+                                render={({
+                                    field,
+                                }: {
+                                    field: ControllerRenderProps<string>; // specify generics as needed
+                                }) => (
                                     <FormItem>
-                                        <FormLabel>Default Appointment Duration</FormLabel>
+                                        <FormLabel>Time Format</FormLabel>
                                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                                             <FormControl>
                                                 <SelectTrigger>
-                                                    <SelectValue placeholder="Select duration" />
+                                                    <SelectValue placeholder="Select format" />
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
-                                                <SelectItem value="15">15 Minutes</SelectItem>
-                                                <SelectItem value="30">30 Minutes</SelectItem>
-                                                <SelectItem value="60">60 Minutes</SelectItem>
+                                                <SelectItem value="12">12-Hour</SelectItem>
+                                                <SelectItem value="24">24-Hour</SelectItem>
                                             </SelectContent>
                                         </Select>
-                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />
@@ -172,7 +186,9 @@ export default function SettingsPage() {
                             <FormField
                                 control={form.control}
                                 name="timeFormat"
-                                render={({ field }) => (
+                                render={({ field }: {
+                                    field: ControllerRenderProps<string>; // specify generics as needed
+                                }) => (
                                     <FormItem>
                                         <FormLabel>Time Format</FormLabel>
                                         <Select onValueChange={field.onChange} defaultValue={field.value}>

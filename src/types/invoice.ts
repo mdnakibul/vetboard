@@ -10,3 +10,9 @@ export interface Invoice {
   total: number;
   status: "Paid" | "Unpaid";
 }
+
+export interface InvoiceItem {
+  description: string;
+  quantity: number;
+  unitPrice: number;
+}

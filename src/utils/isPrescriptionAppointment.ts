@@ -9,9 +9,11 @@ export const isPrescriptionOverdue = (
 
   const today = new Date().toISOString().split("T")[0];
 
-  const hasFutureAppointment = patientAppointments.some(
-    (appt) => appt.date > prescription.nextReviewDate
-  );
+  const hasFutureAppointment = prescription.nextReviewDate
+    ? patientAppointments.some(
+        (appt) => appt.date > prescription.nextReviewDate!
+      )
+    : false;
 
   return prescription.nextReviewDate < today && !hasFutureAppointment;
 };
