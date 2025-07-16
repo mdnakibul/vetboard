@@ -4,6 +4,7 @@ import { Stethoscope } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button-variants"
 import { FaFileInvoiceDollar } from "react-icons/fa"
+import logo from '../assets/vetboard_logo.png'
 
 const navItems = [
     { name: "Dashboard", path: "/", icon: <FaPaw /> },
@@ -20,7 +21,7 @@ export default function Sidebar() {
             {/* Logo */}
             <div className="mb-6">
                 <img
-                    src="/src/assets/vetboard_logo.png"
+                    src={logo}
                     alt="VetBoard Logo"
                     className="w-full h-28 object-cover rounded-md"
                 />
